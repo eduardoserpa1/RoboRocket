@@ -12,7 +12,6 @@ function chamaPython(){
 
     var sapmhi_py = new PythonShell('sapmhi_py.py', opcoes);
 
-
     sapmhi_py.on('message', function(message){
         swal(message);
     })
