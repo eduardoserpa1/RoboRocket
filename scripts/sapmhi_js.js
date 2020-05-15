@@ -1,18 +1,21 @@
-function chamaPython(){
+function chamaPy(){
 
-    var {PythonShell} = require("python-shell")
-    var path = require("path")
-
-    var tipo_vela = 5
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+    
+    var select = document.getElementById('vela');
+    var tipo_vela = select.options[select.selectedIndex].value;
+    var tempo_vela = document.getElementById('tempo').value;
 
     var opcoes = {
         scriptPath : path.join(__dirname, '../engine/'),
-        args : [tipo_vela]
+        args : [tipo_vela, tempo_vela]
     }
 
     var sapmhi_py = new PythonShell('sapmhi_py.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-        swal(message);
+        alert(message);
+        
     })
 }
