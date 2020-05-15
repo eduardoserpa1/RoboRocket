@@ -1,3 +1,12 @@
 body{
     background-color: gray;
 }
+#teste{
+    background-color: violet;
+    width: 400px;
+    height: 400px;
+}
+button{
+    width: 150px;
+    height: 100px;
+}

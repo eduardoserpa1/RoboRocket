@@ -3,8 +3,9 @@ function chamaPy(){
     const {PythonShell} = require("python-shell");
     var path = require("path");
     
-    var select = document.getElementById('vela');
-    var tipo_vela = select.options[select.selectedIndex].value;
+    var selectBox = document.getElementById("sel");
+    var tipo_vela = selectBox.options[selectBox.selectedIndex].value;
+    
     var tempo_vela = document.getElementById('tempo').value;
 
     var opcoes = {
