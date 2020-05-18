@@ -16,7 +16,7 @@ function chamaPy(){
     var sapmhi_py = new PythonShell('sapmhi_py.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-        alert(message);
+        document.getElementById('teste').innerHTML = message;
         
     })
 }
