@@ -54,141 +54,278 @@ lista_analise = []
 inicio= time.time()
 
 x= len(lista_digital)
+
 div_final += "<h1>Quantidade de ativos abertos no momento: "+str(x)+"</h1>"
 
-for t in range(x):
 
-    c.connect()
 
-    vela = c.get_candles(lista_digital[t],tipo_vela,qtd_velas_horas+1,hora_atual)
+
+
+
+
+
+
+if tipo_vela == 300:
+    for t in range(x):
+        #print("----------")
+        
+        #print(str(t)+" - "+str(x))
+        vela = c.get_candles(lista_digital[t],tipo_vela,qtd_velas_horas-1,hora_atual)
     
-    lista_analise.append(lista_digital[t])
+        lista_analise.append(lista_digital[t])
+        
 
-    for i in range(qtd_velas_horas):
+        for i in range(qtd_velas_horas-1):
 
-        lista_velas = dict(vela[i])
+            lista_velas = dict(vela[i])
 
-        valida = lista_velas["open"] - lista_velas["close"]
+            valida = lista_velas["open"] - lista_velas["close"]
 
-        if valida > 0:
+            if valida > 0:
          
-           lista_analise.append('p')
-        else:
+               lista_analise.append('p')
+            else:
           
-           lista_analise.append('c')
-
-    hora_atual_analise = time.localtime()
-    hora_atual_analise = int(hora_atual_analise.tm_min)
-
-    qtd_elementos = len(lista_analise)
-
-    if hora_atual_analise % 5 == 0: #certo
-        lista_analise.pop(qtd_elementos-1)
-        lista_analise.pop(qtd_elementos-2)
+               lista_analise.append('c')
         
-    if hora_atual_analise % 5 == 1: #certo
-        lista_analise.pop(qtd_elementos-1)
-        lista_analise.pop(qtd_elementos-2)
-        lista_analise.pop(qtd_elementos-3)
+        tamanho_lista_analise = len(lista_analise)
+
+
+        if tamanho_lista_analise % 5 == 0:
+            lista_analise.pop(tamanho_lista_analise-1)
+
+        if tamanho_lista_analise % 5 == 1:
+            lista_analise.pop(tamanho_lista_analise-1)
+            lista_analise.pop(tamanho_lista_analise-2)
         
-        lista_analise.pop(1)
-        lista_analise.pop(1)
-        lista_analise.pop(1)
-        lista_analise.pop(1)
+        if tamanho_lista_analise % 5 == 2:
+            lista_analise.pop(tamanho_lista_analise-1)
+            lista_analise.pop(tamanho_lista_analise-2)
+            lista_analise.pop(tamanho_lista_analise-3)
 
-    if hora_atual_analise % 5 == 2: #certo
-        lista_analise.pop(qtd_elementos-1)
-        lista_analise.pop(qtd_elementos-2)
-        lista_analise.pop(qtd_elementos-3)
-        lista_analise.pop(qtd_elementos-4)
-        
-        lista_analise.pop(1)
-        lista_analise.pop(1)
-        lista_analise.pop(1)
+        if tamanho_lista_analise % 5 == 3:
+            lista_analise.pop(tamanho_lista_analise-1)
+            lista_analise.pop(tamanho_lista_analise-2)
+            lista_analise.pop(tamanho_lista_analise-3)
+            lista_analise.pop(tamanho_lista_analise-4)
 
-    if hora_atual_analise % 5 == 3: #certo
-        lista_analise.pop(1)
-        lista_analise.pop(1)
-    
-    if hora_atual_analise % 5 == 4: #certo
-        lista_analise.pop(qtd_elementos-1)
-        lista_analise.pop(1)
-    
-    #div_final += "<br><br>"+str(lista_analise)+"<br><br>"
-    qtd_entradas = int(len(lista_analise) / 5) 
+        #print(lista_analise)
+        #print(len(lista_analise))
 
-    qtd_p = 0
-    qtd_c = 0
-    qtd_mg = 0
-    lista_qtd_win = []
+        hora_atual_analise = time.localtime()
+        hora_atual_analise = int(hora_atual_analise.tm_min)
 
-    verifica_win = False
-    
-    for j in range(qtd_entradas):
+        qtd_elementos = len(lista_analise)
+
+        qtd_entradas = int(len(lista_analise) / 5) 
+
+        qtd_p = 0
+        qtd_c = 0
+        qtd_mg = 0
+        lista_qtd_win = []
 
         verifica_win = False
 
-        for g in range(3):
-            if lista_analise[g+3] == 'p':
-                qtd_p += 1
-            else:
-                qtd_c += 1
-
-
-        if qtd_p > qtd_c:
-            if lista_analise[6] == 'c':
-                verifica_win = True
-                qtd_mg = 0
-            else:
-                if lista_analise[7] == 'c':
-                    verifica_win = True
-                    qtd_mg = 1
-                else:
-                    if lista_analise[8] == 'c':
-                        verifica_win = True
-                        qtd_mg = 2
         
 
-        if qtd_c > qtd_p:
-            if lista_analise[6] == 'p':
-                verifica_win = True
-                qtd_mg = 0
-            else:
-                if lista_analise[7] == 'p':
-                    verifica_win = True
-                    qtd_mg = 1
-                else:
-                    if lista_analise[8] == 'p':
-                        verifica_win = True
-                        qtd_mg = 2
+        for j in range(qtd_entradas):
+            #print(lista_analise)
+            verifica_win = False
 
-        if verifica_win == True:
-            lista_qtd_win.append('w')
-            lista_qtd_win.append(qtd_mg)
-        else:
-            lista_qtd_win.append('l')
-            lista_qtd_win.append(2)
+            for g in range(3):
+                if lista_analise[g+3] == 'p':
+                    qtd_p += 1
+                else:
+                    qtd_c += 1
+
+
+            if qtd_p > qtd_c:
+                if lista_analise[6] == 'c':
+                    verifica_win = True
+                    qtd_mg = 0
+                else:
+                    if lista_analise[7] == 'c':
+                        verifica_win = True
+                        qtd_mg = 1
+                    else:
+                        if lista_analise[8] == 'c':
+                           verifica_win = True
+                           qtd_mg = 2
         
 
-        lista_analise.pop(1)
-        lista_analise.pop(1)
-        lista_analise.pop(1)
-        lista_analise.pop(1)
-        lista_analise.pop(1)
-        #; anti-gatinho
+            if qtd_c > qtd_p:
+                if lista_analise[6] == 'p':
+                    verifica_win = True
+                    qtd_mg = 0
+                else:
+                    if lista_analise[7] == 'p':
+                        verifica_win = True
+                        qtd_mg = 1
+                    else:
+                       if lista_analise[8] == 'p':
+                           verifica_win = True
+                           qtd_mg = 2
 
-    lista_aux = []
-    lista_aux.append(lista_analise[0])
-    lista_aux.append(lista_qtd_win)
+            if verifica_win == True:
+                lista_qtd_win.append('w')
+                lista_qtd_win.append(qtd_mg)
+            else:
+                lista_qtd_win.append('l')
+                lista_qtd_win.append(2)
+        
 
-    lista_final.append(lista_aux)
+            lista_analise.pop(1)
+            lista_analise.pop(1)
+            lista_analise.pop(1)
+            lista_analise.pop(1)
+            lista_analise.pop(1)
+            #; anti-gatinho
 
-    lista_analise.clear()
+        lista_aux = []
+        lista_aux.append(lista_analise[0])
+        lista_aux.append(lista_qtd_win)
+
+        lista_final.append(lista_aux)
+
+        lista_analise.clear()
+
+
+#ajustar lista para analise
+if tipo_vela == 60:
+    for t in range(x):
+
+        vela = c.get_candles(lista_digital[t],tipo_vela,qtd_velas_horas+1,hora_atual)
+    
+        lista_analise.append(lista_digital[t])
+
+        for i in range(qtd_velas_horas):
+
+            lista_velas = dict(vela[i])
+
+            valida = lista_velas["open"] - lista_velas["close"]
+
+            if valida > 0:
+         
+               lista_analise.append('p')
+            else:
+          
+               lista_analise.append('c')
+
+        hora_atual_analise = time.localtime()
+        hora_atual_analise = int(hora_atual_analise.tm_min)
+
+        qtd_elementos = len(lista_analise)
+
+        if tipo_vela != 300:
+            if hora_atual_analise % 5 == 0: #certo
+                lista_analise.pop(qtd_elementos-1)
+                lista_analise.pop(qtd_elementos-2)
+        
+            if hora_atual_analise % 5 == 1: #certo
+                lista_analise.pop(qtd_elementos-1)
+                lista_analise.pop(qtd_elementos-2)
+                lista_analise.pop(qtd_elementos-3)
+        
+                lista_analise.pop(1)
+                lista_analise.pop(1)
+                lista_analise.pop(1)
+                lista_analise.pop(1)
+
+            if hora_atual_analise % 5 == 2: #certo
+                lista_analise.pop(qtd_elementos-1)
+                lista_analise.pop(qtd_elementos-2)
+                lista_analise.pop(qtd_elementos-3)
+                lista_analise.pop(qtd_elementos-4)
+        
+                lista_analise.pop(1)
+                lista_analise.pop(1)
+                lista_analise.pop(1)
+
+            if hora_atual_analise % 5 == 3: #certo
+                lista_analise.pop(1)
+                lista_analise.pop(1)
+    
+            if hora_atual_analise % 5 == 4: #certo
+                lista_analise.pop(qtd_elementos-1)
+                lista_analise.pop(1)
+    
+   
+        qtd_entradas = int(len(lista_analise) / 5) 
+
+        qtd_p = 0
+        qtd_c = 0
+        qtd_mg = 0
+        lista_qtd_win = []
+
+        verifica_win = False
+
+        print(lista_analise)
+
+        for j in range(qtd_entradas):
+
+            verifica_win = False
+
+            for g in range(3):
+                if lista_analise[g+3] == 'p':
+                    qtd_p += 1
+                else:
+                    qtd_c += 1
+
+
+            if qtd_p > qtd_c:
+                if lista_analise[6] == 'c':
+                    verifica_win = True
+                    qtd_mg = 0
+                else:
+                    if lista_analise[7] == 'c':
+                        verifica_win = True
+                        qtd_mg = 1
+                    else:
+                        if lista_analise[8] == 'c':
+                            verifica_win = True
+                            qtd_mg = 2
+        
+
+            if qtd_c > qtd_p:
+                if lista_analise[6] == 'p':
+                    verifica_win = True
+                    qtd_mg = 0
+                else:
+                    if lista_analise[7] == 'p':
+                        verifica_win = True
+                        qtd_mg = 1
+                    else:
+                        if lista_analise[8] == 'p':
+                            verifica_win = True
+                            qtd_mg = 2
+
+            if verifica_win == True:
+                lista_qtd_win.append('w')
+                lista_qtd_win.append(qtd_mg)
+            else:
+                lista_qtd_win.append('l')
+                lista_qtd_win.append(2)
+        
+
+            lista_analise.pop(1)
+            lista_analise.pop(1)
+            lista_analise.pop(1)
+            lista_analise.pop(1)
+            lista_analise.pop(1)
+            #; anti-gatinho
+
+        lista_aux = []
+        lista_aux.append(lista_analise[0])
+        lista_aux.append(lista_qtd_win)
+
+        lista_final.append(lista_aux)
+
+        lista_analise.clear()
 
 qtd_win = 0
 
 div_final += "<br><br>"
-
+#validar porcentagens
 for k in lista_final:
     cont = 0
     
