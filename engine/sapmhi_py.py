@@ -9,8 +9,6 @@ lista_final = []
 tempo_vela = int(sys.argv[2])
 tipo_vela = int(sys.argv[1])
 
-
-
 c = iq_util.conexao_iq("dudu.rserpa@gmail.com","dudu123les")
 
 while True:
@@ -27,15 +25,12 @@ lista_ativos = c.get_all_open_time()
 
 lista_digital = []
 
-
-
 for e in lista_ativos['digital'].keys(): 
     if str(e) == "GBPJPY-OTC":
         div_final += ""
     else:
         if lista_ativos['digital'][str(e)]['open'] == True:
             lista_digital.append(str(e))
-
 
 horas_segundos = tempo_vela * 3600
 
@@ -56,14 +51,6 @@ inicio= time.time()
 x= len(lista_digital)
 
 div_final += "<h1>Quantidade de ativos abertos no momento: "+str(x)+"</h1>"
-
-
-
-
-
-
-
-
 
 if tipo_vela == 300:
     for t in range(x):
@@ -188,7 +175,6 @@ if tipo_vela == 300:
         lista_final.append(lista_aux)
 
         lista_analise.clear()
-
 
 #ajustar lista para analise
 if tipo_vela == 60:
@@ -325,6 +311,7 @@ if tipo_vela == 60:
 qtd_win = 0
 
 div_final += "<br><br>"
+
 #validar porcentagens
 for k in lista_final:
     cont = 0
@@ -369,7 +356,6 @@ for k in lista_final:
            # div_final += "TOTAL : " + str( ((cont_win_0mg+cont_win_1mg+cont_win_2mg)*100)/total_entradas ) + "<br><br>"
         
         cont += 1
-
 
 fim = time.time()
 
