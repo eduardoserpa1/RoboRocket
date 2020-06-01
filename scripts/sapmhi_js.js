@@ -1,7 +1,8 @@
 var valor ="";
 var id_ativos = [];
+
 var passaValor = function(valor){
-   
+
     if(id_ativos.length > 2){
         for (var i = 0; i < id_ativos.length; i+=2) {
             if(valor==id_ativos[i]){
@@ -10,8 +11,13 @@ var passaValor = function(valor){
         }
     }
  
-    window.location.href = "../index.html?nomeAtivo="+valor;
+    var r = confirm("Você tem certeza que deseja operar no ativo '"+valor+"'");
 
+    if(r==true){
+        window.location.href = "../index.html?nomeAtivo="+valor;
+    }else{
+        
+    }
 }
 function chamaPy(){
 
