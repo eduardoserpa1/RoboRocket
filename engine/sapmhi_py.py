@@ -45,7 +45,7 @@ inicio= time.time()
 
 x= len(lista_digital)
 
-div_final += str(x)+"-"
+div_final += str(x)+","
 
 if tipo_vela == 300:
     for t in range(x):
@@ -310,7 +310,7 @@ for k in lista_final:
         cont_win_2mg=0
 
         if cont%2==0:
-            div_final += str(p)+"-"
+            div_final += str(p)+","
         else:  
 
             cont_win = int(len(p) / 2)
@@ -335,9 +335,9 @@ for k in lista_final:
                    
             
             total_entradas = cont_loss + cont_win_0mg + cont_win_1mg + cont_win_2mg
-            div_final += str( round((cont_win_0mg*100) /total_entradas,1) ) + "-"
-            div_final += str( round(( (cont_win_0mg+cont_win_1mg) *100) /total_entradas,1) ) + "-"
-            div_final += str( round(( (cont_win_0mg+cont_win_1mg+cont_win_2mg) *100) /total_entradas,1) ) + "-"
+            div_final += str( round((cont_win_0mg*100) /total_entradas,1) ) + ","
+            div_final += str( round(( (cont_win_0mg+cont_win_1mg) *100) /total_entradas,1) ) + ","
+            div_final += str( round(( (cont_win_0mg+cont_win_1mg+cont_win_2mg) *100) /total_entradas,1) ) + ","
         
         cont += 1
 
