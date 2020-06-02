@@ -16,5 +16,27 @@ function queryString(parameter) {
     }   
 }
 
+function conexao_iq(){
+
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+    
+    var t = 1;
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, '../engine/'),
+        args : [t]
+    }
+
+    var sapmhi_py = new PythonShell('conexao.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+             
+        alert(message);
+
+    })
+}
+
 var ativo_selecionado = queryString("nomeAtivo");
 alert(ativo_selecionado);
+conexao_iq();
