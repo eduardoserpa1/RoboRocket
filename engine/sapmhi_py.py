@@ -9,7 +9,7 @@ lista_final = []
 tempo_vela = int(sys.argv[2])
 tipo_vela = int(sys.argv[1])
 
-c = iq_util.conexao_iq("","")
+c = iq_util.conexao_iq("dudu.rserpa@gmail.com","dudu123les")
 
 while True:
     if c.check_connect() == False:
@@ -24,11 +24,11 @@ lista_ativos = c.get_all_open_time()
 
 lista_digital = []
 
-for e in lista_ativos['digital'].keys(): 
+for e in lista_ativos['turbo'].keys(): 
     if str(e) == "GBPJPY-OTC":
         div_final += ""
     else:
-        if lista_ativos['digital'][str(e)]['open'] == True:
+        if lista_ativos['turbo'][str(e)]['open'] == True:
             lista_digital.append(str(e))
 
 horas_segundos = tempo_vela * 3600

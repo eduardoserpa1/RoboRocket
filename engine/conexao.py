@@ -5,4 +5,19 @@ import iq_util
 
 t = sys.argv[1]
 
-conta = iq_util.conexao_iq("","")
+r = ""
+
+login = "dudu.rserpa@gmail.com"
+senha = "dudu123les"
+
+conta = iq_util.conexao_iq(login,senha)
+
+r += login + ","
+
+conta.change_balance(str(t))
+
+r+= str(conta.get_balance()) + ","
+
+
+
+print(r)
