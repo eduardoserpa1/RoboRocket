@@ -9,6 +9,7 @@ e3 = int(sys.argv[3])
 tipo_vela = int(sys.argv[4])
 ativo = str(sys.argv[5])
 ordem_executada = str(sys.argv[6])
+delay = int(sys.argv[7])
 
 
 
@@ -22,12 +23,14 @@ else:
 
 conta = iq_util.conexao_iq("dudutxgamess@gmail.com","dudu123les")
 
+delay_final= 58-delay
+
 while x==True:
     hora_atual = time.time()
     hora_atual_analise = time.localtime()
     hora_atual_analise = int(hora_atual_analise.tm_sec)
 
-    if hora_atual_analise%58==0:
+    if hora_atual_analise==delay_final:
         x=False
         vela = conta.get_candles(ativo,tipo_vela,1,hora_atual)
     
@@ -43,7 +46,7 @@ else:
     lista_analise.append('c')
 
  
-if(lista_analise[0]==ordem_executada):
+if lista_analise[0]==ordem_executada:
     r = "win"
 else:
     r = "loss"

@@ -10,8 +10,7 @@
       <a href="telas/sapmhi_tela.html">Entrar no SAP-MHI</a>
       <br>
       <br>
-      <br>
-    <br>
+  
       <button onclick="">ENVIAR</button>
     <br>
     <br>
@@ -55,16 +54,16 @@
 
       <label>Estratégia de entradas: </label>
       <br>
-      <input type="radio" id="mg" name="estrategia_radio" value="mg" checked><label>MARTINGALE </label>
+      <input type="radio" id="mg" name="estrategia_radio" value="mg" onclick="seleciona_mg()" checked><label>MARTINGALE </label>
       <br>
-      <input type="radio" id="soros" name="estrategia_radio" value="soros"><label>SOROS</label>
+      <input type="radio" id="soros" name="estrategia_radio" value="soros" onclick="seleciona_soros()"><label>SOROS</label>
       <br>
-      <input type="radio" id="ciclos" name="estrategia_radio" value="ciclos"><label>CICLOS</label>
+      <input type="radio" id="ciclos" name="estrategia_radio" value="ciclos" onclick="seleciona_ciclos()"><label>CICLOS</label>
       <br>
-      <input type="radio" id="sorociclos" name="estrategia_radio" value="sorociclos"><label>SOROCICLOS</label>
+      <input type="radio" id="ciclosoros" name="estrategia_radio" value="ciclosoros" onclick="seleciona_ciclosoros()"><label>CICLOSOROS</label>
       <br>
       <label>-------------------------------------------------------------------------------------------------------------------------</label>
-    <br>
+      <br>
       <label>MG: </label>
       <br>
       <label>ENTRADA: </label><input type="text" id="entrada" onfocusout="e1 = this.value;" value="0">
@@ -73,8 +72,49 @@
       <br>
       <label>MG 2: </label><input type="text" id="mg2" onfocusout="e3 = this.value;" value="0">
     <br>
+    <br>
+      <label>SOROS: </label>
+      <br>
+      <label>QTD NIVEIS: </label><input type="text" id="niveis" onfocusout="" value="0" disabled>
+      <br>
+      <label>% SOROS: </label><input type="text" id="porcento_soros" onfocusout="" value="0" disabled>
+    <br>
+    <br>
+      <label>CICLOS: </label>
+      <br>
+      <label>CICLO 1: </label>
+
+      <input type="text" id="ciclo1_mg0" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo1_mg1" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo1_mg2" onfocusout="" value="0" disabled>
+
+      <br>
+      <label>CICLO 2: </label>
+      <input type="text" id="ciclo2_mg0" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo2_mg1" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo2_mg2" onfocusout="" value="0" disabled>
+      <br>
+      <label>CICLO 3: </label>
+      <input type="text" id="ciclo3_mg0" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo3_mg1" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo3_mg2" onfocusout="" value="0" disabled>
+      <br>
+      <label>CICLO 4: </label>
+      <input type="text" id="ciclo4_mg0" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo4_mg1" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo4_mg2" onfocusout="" value="0" disabled>
+      <br>
+      <label>CICLO 5: </label>
+      <input type="text" id="ciclo5_mg0" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo5_mg1" onfocusout="" value="0" disabled> -
+      <input type="text" id="ciclo5_mg2" onfocusout="" value="0" disabled>
+      <br>
+    <br>
       <label>-------------------------------------------------------------------------------------------------------------------------</label>
-      
+    <br>
+    <label>ATIVO: </label><label id="ativo"></label>
+    <br>
+    <label>PROFIT: </label><label id="profit"></label>
     <br>
     <br>
     <input type="radio" id="m1" name="tempo_radio" value="60" checked><label>M1</label>

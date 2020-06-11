@@ -8,6 +8,8 @@ e2 = int(sys.argv[2])
 e3 = int(sys.argv[3])
 tipo_vela = int(sys.argv[4])
 ativo = str(sys.argv[5])
+delay = int(sys.argv[6])
+tipo_conta = str(sys.argv[7])
 
 
 
@@ -19,17 +21,21 @@ if tipo_vela==60:
 else:
     tipo_vela_compra = 5
 
+    
+
 
 conta = iq_util.conexao_iq("dudu.rserpa@gmail.com","dudu123les")
 
+conta.change_balance(tipo_conta)
 
+delay_final= 58-delay
 
 while x==True:
     
     hora_atual_analise = time.localtime()
     hora_atual_analise = int(hora_atual_analise.tm_sec)
 
-    if hora_atual_analise%58==0:
+    if hora_atual_analise==delay_final:
         x=False
         vela = conta.get_candles(ativo,tipo_vela,9,time.time())
     
@@ -78,10 +84,10 @@ else:
 
 
 if cont_c>cont_p:
-    check = conta.buy(e1,ativo,"put",tipo_vela_compra)
+    conta.buy(e1,ativo,"put",tipo_vela_compra)
     r= "p" 
 else:
-    check = conta.buy(e1,ativo,"call",tipo_vela_compra)
+    conta.buy(e1,ativo,"call",tipo_vela_compra)
     r= "c" 
 
 

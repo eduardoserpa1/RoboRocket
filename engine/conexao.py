@@ -4,6 +4,7 @@ import sys, logging
 import iq_util
 
 t = sys.argv[1]
+ativo = sys.argv[2]
 
 r = ""
 
@@ -16,7 +17,11 @@ r += login + ","
 
 conta.change_balance(str(t))
 
-r+= str(conta.get_balance()) + ","
+r += str(conta.get_balance()) + ","
+
+profit = conta.get_all_profit()
+
+r += str(profit[ativo]["turbo"])
 
 
 
