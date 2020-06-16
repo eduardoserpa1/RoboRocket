@@ -11,15 +11,18 @@
       <br>
       <br>
   
-      <button onclick="">ENVIAR</button>
+      
     <br>
     <br>
       <label>Email conectado: </label><label id="email"></label>
     <br>
       <label>Tipo da Conta: </label><label id="tipo_conta"></label>
       <button id="troca_tipo_conta" onclick="trocaTipoConta()"> TROCAR PARA REAL</button>
+      <br>
+      <label>Saldo atual: </label><label id="saldo"></label>
     <br>
-      <label>Saldo: </label><label id="saldo"></label>
+ 
+      <label>Saldo inicial: </label><label id="saldo_inicial"></label>
     <br>
     <label>-------------------------------------------------------------------------------------------------------------------------</label>
     <br>
@@ -35,17 +38,17 @@
     <br>
 
 
-      <label>Stop Win: </label><input type="text" id="stop_win" onfocusout="calculaStop_w(this.value)">   <label>Valor total após stop win: </label><label id="total_stop_win"></label>
+      <label>Stop Win: </label><input type="number" id="stop_win" onfocusout="calculaStop_w(this.value)">   <label>Valor total após stop win: </label><label id="total_stop_win"></label>
     <br>
-      <label>Stop Loss: </label><input type="text" id="stop_loss" onfocusout="calculaStop_l(this.value)">   <label>Valor total após stop loss: </label><label id="total_stop_loss"></label>
+      <label>Stop Loss: </label><input type="number" id="stop_loss" onfocusout="calculaStop_l(this.value)">   <label>Valor total após stop loss: </label><label id="total_stop_loss"></label>
     <br>
+    <label>-------------------------------------------------------------------------------------------------------------------------</label>
+    <br>
+    <label>Ganhos nesta sessão:$</label><label id="ganhos">0</label>
+    <br> 
       <label>-------------------------------------------------------------------------------------------------------------------------</label>
     <br>
-    <label>Ganhos: </label><label id="ganhos">0</label>
-    <br>
-      <label>-------------------------------------------------------------------------------------------------------------------------</label>
-    <br>
-      <label>Delay: </label><input type="text" id="delay" onfocusout="delay = this.value;" value="0">
+      <label>Delay: </label><input type="number" id="delay" onfocusout="delay = this.value;" value="0">
     <br>
       <label>-------------------------------------------------------------------------------------------------------------------------</label>
     <br>
@@ -66,48 +69,54 @@
       <br>
       <label>MG: </label>
       <br>
-      <label>ENTRADA: </label><input type="text" id="entrada" onfocusout="e1 = this.value;" value="0">
+      <label>ENTRADA: </label><input type="number" id="entrada" onfocusout="e1 = this.value;" value="0">
       <br>
-      <label>MG 1: </label><input type="text" id="mg1" onfocusout="e2 = this.value;" value="0">
+      <label>MG 1: </label><input type="number" id="mg1" onfocusout="e2 = this.value;" value="0">
       <br>
-      <label>MG 2: </label><input type="text" id="mg2" onfocusout="e3 = this.value;" value="0">
+      <label>MG 2: </label><input type="number" id="mg2" onfocusout="e3 = this.value;" value="0">
     <br>
     <br>
       <label>SOROS: </label>
       <br>
-      <label>QTD NIVEIS: </label><input type="text" id="niveis" onfocusout="" value="0" disabled>
+      <label>QTD NIVEIS: </label><input type="number" id="niveis" onfocusout="nivel_soro = this.value;" value="0" disabled>
       <br>
-      <label>% SOROS: </label><input type="text" id="porcento_soros" onfocusout="" value="0" disabled>
+      <label>% SOROS: </label><input type="number" id="porcento_soros" onfocusout="porcento_soro = (this.value)/100;" value="0" disabled>
+      <br>
+      <label>ENTRADA: </label><input type="number" id="entrada_soro" onfocusout="e1 = this.value; gera_mg_soro();" value="0" disabled>
+      <br>
+      <label>MULTIPLICADOR MG: </label><input type="number" id="multiplicador" onfocusout="multiplicador = this.value; gera_mg_soro();" value="0" disabled>
+      <br>
+      <label>QTD MG (MÁX 2): </label><input type="number" id="qtd_multiplicador" onfocusout="qtd_multiplicador = this.value; gera_mg_soro();" value="0" disabled>
     <br>
     <br>
       <label>CICLOS: </label>
       <br>
       <label>CICLO 1: </label>
 
-      <input type="text" id="ciclo1_mg0" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo1_mg1" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo1_mg2" onfocusout="" value="0" disabled>
+      <input type="number" id="ciclo1_mg0" onfocusout="e1 = this.value;" value="0" disabled> -
+      <input type="number" id="ciclo1_mg1" onfocusout="e2 = this.value;" value="0" disabled> -
+      <input type="number" id="ciclo1_mg2" onfocusout="e3 = this.value;" value="0" disabled>
 
       <br>
       <label>CICLO 2: </label>
-      <input type="text" id="ciclo2_mg0" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo2_mg1" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo2_mg2" onfocusout="" value="0" disabled>
+      <input type="number" id="ciclo2_mg0"  value="0" disabled> -
+      <input type="number" id="ciclo2_mg1"  value="0" disabled> -
+      <input type="number" id="ciclo2_mg2"  value="0" disabled>
       <br>
       <label>CICLO 3: </label>
-      <input type="text" id="ciclo3_mg0" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo3_mg1" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo3_mg2" onfocusout="" value="0" disabled>
+      <input type="number" id="ciclo3_mg0"  value="0" disabled> -
+      <input type="number" id="ciclo3_mg1"  value="0" disabled> -
+      <input type="number" id="ciclo3_mg2"  value="0" disabled>
       <br>
       <label>CICLO 4: </label>
-      <input type="text" id="ciclo4_mg0" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo4_mg1" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo4_mg2" onfocusout="" value="0" disabled>
+      <input type="number" id="ciclo4_mg0"  value="0" disabled> -
+      <input type="number" id="ciclo4_mg1"  value="0" disabled> -
+      <input type="number" id="ciclo4_mg2"  value="0" disabled>
       <br>
       <label>CICLO 5: </label>
-      <input type="text" id="ciclo5_mg0" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo5_mg1" onfocusout="" value="0" disabled> -
-      <input type="text" id="ciclo5_mg2" onfocusout="" value="0" disabled>
+      <input type="number" id="ciclo5_mg0"  value="0" disabled> -
+      <input type="number" id="ciclo5_mg1"  value="0" disabled> -
+      <input type="number" id="ciclo5_mg2"  value="0" disabled>
       <br>
     <br>
       <label>-------------------------------------------------------------------------------------------------------------------------</label>

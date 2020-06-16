@@ -50,18 +50,31 @@ else:
 
 
 
-if lista_analise[0] == ordem_executada:
-    r = "win"
-else:
-    if ordem_executada == "p":
-        ordem_executada="put"
-    else:
-        ordem_executada="call"
+if valida!=0:
+    if valida > 0:
+        lista_analise.append('p')
+    else: 
+        lista_analise.append('c')
 
+    if lista_analise[0] == ordem_executada:
+        r = "win"
+    else:
+        if ordem_executada == "p":
+            ordem_executada="put"
+        else:
+            ordem_executada="call"
+
+        if e3>=1:
+            conta.buy(e3,ativo,ordem_executada,tipo_vela_compra)
+            r = "loss"
+        else:
+            r="lossmg1"   
+else:
     if e3>=1:
         conta.buy(e3,ativo,ordem_executada,tipo_vela_compra)
-    
-    r = "loss"
+        r="loss"
+    else:
+        r="lossmg1" 
 
 
 

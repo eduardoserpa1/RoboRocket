@@ -62,9 +62,15 @@ function conexao_iq(tipo_conta){
 
     })
 }
+function gera_ganho(){
+    ganhos = parseFloat(saldo) - parseFloat(saldo_inicial);
+    document.getElementById('ganhos').innerHTML = ganhos.toFixed(2);
+}
 function verifica_stop(){
+    conexao_iq(tipo_conta);
     var stop_w = parseFloat(stop_win);
     var stop_l = parseFloat(stop_loss);
+
      if (stop_w<=saldo) {
          para();
          console.log("XXXXXXXXXXX   STOP WIN   XXXXXXXXXXX");
@@ -74,23 +80,15 @@ function verifica_stop(){
         para();
         console.log("XXXXXXXXXXX   STOP LOSS   XXXXXXXXXXX");
      }
-}
-function gera_ganho(entrada,id){
-    if (id==1) {
-        ganhos += parseFloat(parseFloat(entrada)*parseFloat(profit));
-    }
-  
-    if (id==2) {
-        ganhos -= parseFloat(parseFloat(entrada));
-    }
-    
 
-    document.getElementById('ganhos').innerHTML = "$ " + ganhos.toFixed(2);
+     gera_ganho();
+     console.log("ganhos:"+ganhos);
 }
+
 
 //------------------------------------
 //Funções de entradas
-
+//MG
 function main_code(){
     
     const {PythonShell} = require("python-shell");
@@ -106,9 +104,7 @@ function main_code(){
     sapmhi_py.on('message', function(message){
         console.log("1 Entrada");
         ordem_executada = message + "";
-        sleep(3000).then(() => {
-            
-            conexao_iq(tipo_conta);
+        sleep(10000).then(() => {
             verifica_stop();
         });
     })
@@ -132,26 +128,25 @@ function main_code_mg1(){
         if (message=='win') {
             verificador_win=true;
             console.log("--- WIN ---");
-            sleep(3000).then(() => {
-                gera_ganho(e1,1);
-                conexao_iq(tipo_conta);
-                verifica_stop();
-            });
+            
             verificador_win=true;
         }
         if(message=="loss"){
             verificador_win=false;
             console.log("MG1");
-            sleep(3000).then(() => {
-                gera_ganho(e1,2);
-                conexao_iq(tipo_conta);
-                verifica_stop();
-            });
+           
             verificador_win=false;
         }
-        
-        
+        if(message=="lossmg0"){
+            verificador_win=true;
+            console.log("XXX LOSS XXX");
+           
+            verificador_win=true;
+        }
 
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
 
     })
 }
@@ -174,23 +169,23 @@ function main_code_mg2(){
         if(message=='win'){
             verificador_win_mg1=true;
             console.log("--- WIN MG1 ---");
-            sleep(3000).then(() => {
-                gera_ganho(e2,1);
-                conexao_iq(tipo_conta);
-                verifica_stop();
-            });
+            
         }
         if(message=="loss"){
             verificador_win_mg1=false;
             console.log("MG2");
-            sleep(3000).then(() => {
-                gera_ganho(e2,2);
-                conexao_iq(tipo_conta);
-                verifica_stop();
-            });
+            
+        }
+        if(message=="lossmg1"){
+            verificador_win_mg1=true;
+            console.log("XXX LOSS XXX");
+           
+            verificador_win_mg1=true;
         }
 
-        conexao_iq(tipo_conta);
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
     })
 }
 function main_code_verifica(){
@@ -210,24 +205,451 @@ function main_code_verifica(){
     sapmhi_py.on('message', function(message){
         if (message=="win") {
             console.log("--- WIN MG2 ---");
-            sleep(3000).then(() => {
-                gera_ganho(e3,1);
-                conexao_iq(tipo_conta);
-                verifica_stop();
-            });
+            
         }
         if(message=="loss"){
             console.log("XXX- LOSS -XXX");
-            sleep(3000).then(() => {
-                gera_ganho(e3,2);
-                conexao_iq(tipo_conta);
-                verifica_stop();
-            });
+            
         }
-        conexao_iq(tipo_conta);
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
     })
 }
+//SOROS
+function main_code_soros(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
 
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta]
+    }
+
+    var sapmhi_py = new PythonShell('main_code.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+        console.log("1 Entrada");
+        ordem_executada = message + "";
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
+    })
+}
+function main_code_soros_mg1(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta]
+    }
+
+    var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+        
+        if (message=='win') {
+            verificador_win=true;
+            console.log("--- WIN ---");
+            verificador_win=true;
+
+            if(conta_nivel_soro<nivel_soro){
+                
+                var lucro = e1*profit;
+                e1 = e1+(lucro*porcento_soro);
+
+                gera_mg_soro();
+                conta_nivel_soro++;
+            }else{
+                e1 = document.getElementById('entrada_soro').value;
+                gera_mg_soro();
+                conta_nivel_soro=0;
+            }
+        }
+        if(message=="loss"){
+            verificador_win=false;
+            console.log("MG1");
+           
+            verificador_win=false;
+
+            e1 = document.getElementById('entrada_soro').value;
+                gera_mg_soro();
+                conta_nivel_soro=0;
+        }
+        if(message=="lossmg0"){
+            verificador_win=true;
+            console.log("XXX LOSS XXX");
+           
+            verificador_win=true;
+
+            e1 = document.getElementById('entrada_soro').value;
+            gera_mg_soro();
+            conta_nivel_soro=0;
+        }
+
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
+
+    })
+}
+function main_code_soros_mg2(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta]
+    }
+
+    var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+       
+        if(message=='win'){
+            verificador_win_mg1=true;
+            console.log("--- WIN MG1 ---");
+            
+        }
+        if(message=="loss"){
+            verificador_win_mg1=false;
+            console.log("MG2");
+            
+        }
+        if(message=="lossmg1"){
+            verificador_win_mg1=true;
+            console.log("XXX LOSS XXX");
+           
+            verificador_win_mg1=true;
+        }
+
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
+    })
+}
+function main_code_soros_verifica(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay]
+    }
+
+    var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+        if (message=="win") {
+            console.log("--- WIN MG2 ---");
+            
+        }
+        if(message=="loss"){
+            console.log("XXX- LOSS -XXX");
+            
+        }
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
+    })
+}
+//CICLOS
+function main_code_ciclos(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta]
+    }
+
+    var sapmhi_py = new PythonShell('main_code.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+        console.log("1 Entrada");
+        ordem_executada = message + "";
+        
+    })
+}
+function main_code_ciclos_mg1(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta]
+    }
+
+    var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+        
+        if (message=='win') {
+            verificador_win=true;
+            console.log("--- WIN ---");
+
+            verificador_win=true;
+
+            conta_ciclos=0;
+          
+        }
+        if(message=="loss"){
+            verificador_win=false;
+            console.log("MG1");
+           
+            verificador_win=false;
+
+    
+        }
+        if(message=="lossmg0"){
+            verificador_win=true;
+            console.log("XXX LOSS XXX");
+           
+            verificador_win=true;
+
+            conta_ciclos++;
+        }
+
+        
+            verifica_stop();
+        
+
+    })
+}
+function main_code_ciclos_mg2(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta]
+    }
+
+    var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+       
+        if(message=='win'){
+            verificador_win_mg1=true;
+            console.log("--- WIN MG1 ---");
+            conta_ciclos=0;
+        }
+        if(message=="loss"){
+            verificador_win_mg1=false;
+            console.log("MG2");
+            
+        }
+        if(message=="lossmg1"){
+            verificador_win_mg1=true;
+            console.log("XXX LOSS XXX");
+           
+            verificador_win_mg1=true;
+
+            conta_ciclos++;
+        }
+
+        
+            verifica_stop();
+        
+    })
+}
+function main_code_ciclos_verifica(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay]
+    }
+
+    var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+        if (message=="win") {
+            console.log("--- WIN MG2 ---");
+            conta_ciclos=0;
+            
+        }
+        if(message=="loss"){
+            console.log("XXX- LOSS -XXX");
+            conta_ciclos++;
+        }
+      
+            verifica_stop();
+    
+    })
+}
+//CICLOSOROS
+function main_code_ciclosoros(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta]
+    }
+
+    var sapmhi_py = new PythonShell('main_code.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+        console.log("1 Entrada");
+        ordem_executada = message + "";
+        sleep(5000).then(() => {
+            verifica_stop();
+        });
+    })
+}
+function main_code_ciclosoros_mg1(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta]
+    }
+
+    var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+        
+        if (message=='win') {
+            verificador_win=true;
+            console.log("--- WIN ---");
+
+            verificador_win=true;
+
+            conta_ciclos=0;
+            if(conta_nivel_soro<nivel_soro){
+                
+                var lucro = e1*profit;
+                e1 = e1+(lucro*porcento_soro);
+                conta_nivel_soro++;
+            }else{
+                e1 = document.getElementById('ciclo1_mg0').value;
+                conta_nivel_soro=0;
+            }
+        }
+        if(message=="loss"){
+            verificador_win=false;
+            console.log("MG1");
+           
+            verificador_win=false;
+
+            e1 = document.getElementById('ciclo1_mg0').value;
+                conta_nivel_soro=0;
+        }
+        if(message=="lossmg0"){
+            verificador_win=true;
+            console.log("XXX LOSS XXX");
+           
+            verificador_win=true;
+
+            conta_ciclos++;
+
+            e1 = document.getElementById('ciclo1_mg0').value;
+                conta_nivel_soro=0;
+        }
+
+        sleep(5000).then(() => {
+            verifica_stop();
+        });
+
+    })
+}
+function main_code_ciclosoros_mg2(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta]
+    }
+
+    var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+       
+        if(message=='win'){
+            verificador_win_mg1=true;
+            console.log("--- WIN MG1 ---");
+            conta_ciclos=0;
+        }
+        if(message=="loss"){
+            verificador_win_mg1=false;
+            console.log("MG2");
+            
+        }
+        if(message=="lossmg1"){
+            verificador_win_mg1=true;
+            console.log("XXX LOSS XXX");
+           
+            verificador_win_mg1=true;
+
+            conta_ciclos++;
+        }
+
+        sleep(5000).then(() => {
+            verifica_stop();
+        });
+    })
+}
+function main_code_ciclosoros_verifica(){
+    
+    const {PythonShell} = require("python-shell");
+    var path = require("path");
+
+    
+
+    var opcoes = {
+        scriptPath : path.join(__dirname, 'engine/'),
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay]
+    }
+
+    var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
+
+    sapmhi_py.on('message', function(message){
+        if (message=="win") {
+            console.log("--- WIN MG2 ---");
+            conta_ciclos=0;
+            
+        }
+        if(message=="loss"){
+            console.log("XXX- LOSS -XXX");
+            conta_ciclos++;
+        }
+        sleep(5000).then(() => {
+            verifica_stop();
+        });
+    })
+}
 //------------------------------------
 //Funções da interface
 
@@ -301,6 +723,9 @@ function seleciona_mg(){
 
     document.getElementById('niveis').disabled = true;
     document.getElementById('porcento_soros').disabled = true;
+    document.getElementById('entrada_soro').disabled = true;
+    document.getElementById('multiplicador').disabled = true;
+    document.getElementById('qtd_multiplicador').disabled = true;
 
     document.getElementById('ciclo1_mg0').disabled = true;
     document.getElementById('ciclo1_mg1').disabled = true;
@@ -319,12 +744,15 @@ function seleciona_mg(){
     document.getElementById('ciclo5_mg2').disabled = true;
 }
 function seleciona_soros(){
-    document.getElementById('entrada').disabled = false;
-    document.getElementById('mg1').disabled = false;
-    document.getElementById('mg2').disabled = false; 
+    document.getElementById('entrada').disabled = true;
+    document.getElementById('mg1').disabled = true;
+    document.getElementById('mg2').disabled = true; 
 
     document.getElementById('niveis').disabled = false;
     document.getElementById('porcento_soros').disabled = false;
+    document.getElementById('entrada_soro').disabled = false;
+    document.getElementById('multiplicador').disabled = false;
+    document.getElementById('qtd_multiplicador').disabled = false;
 
     document.getElementById('ciclo1_mg0').disabled = true;
     document.getElementById('ciclo1_mg1').disabled = true;
@@ -349,6 +777,9 @@ function seleciona_ciclos(){
 
     document.getElementById('niveis').disabled = true;
     document.getElementById('porcento_soros').disabled = true;
+    document.getElementById('entrada_soro').disabled = true;
+    document.getElementById('multiplicador').disabled = true;
+    document.getElementById('qtd_multiplicador').disabled = true;
 
     document.getElementById('ciclo1_mg0').disabled = false;
     document.getElementById('ciclo1_mg1').disabled = false;
@@ -373,6 +804,9 @@ function seleciona_ciclosoros(){
 
     document.getElementById('niveis').disabled = false;
     document.getElementById('porcento_soros').disabled = false;
+    document.getElementById('entrada_soro').disabled = true;
+    document.getElementById('multiplicador').disabled = true;
+    document.getElementById('qtd_multiplicador').disabled = true;
 
     document.getElementById('ciclo1_mg0').disabled = false;
     document.getElementById('ciclo1_mg1').disabled = false;
@@ -391,21 +825,35 @@ function seleciona_ciclosoros(){
     document.getElementById('ciclo5_mg2').disabled = false;
 }
 
+function gera_mg_soro(){
+    if(multiplicador!=0 && qtd_multiplicador!=0 && e1!=0){
+        if(qtd_multiplicador==1){
+            e2 = e1*multiplicador;
+        }
+        if(qtd_multiplicador==2){
+            e2 = e1*multiplicador;
+            e3 = e2*multiplicador;
+        }
+    }
+}
+
 
 //------------------------------------
 //Globais referente aos campos da interface
-var ativo_selecionado = queryString("nomeAtivo");
+var ativo_selecionado = "EURUSD";//queryString("nomeAtivo");
 var tipo_conta = "PRACTICE";                                
-var email;
-var saldo;
+var email="";
+var saldo=0;
+var saldo_inicial;
 var stop_win;
 var stop_loss;
 var ganhos=0;
 var delay=0;
-var profit;
+var profit=0;
 var ganhos = 0;
 var tipo_vela;
 //-----referentes às estratégias 
+//-----MG
 var e1=0;
 var e2=0;
 var e3=0;
@@ -415,7 +863,16 @@ var diferenciador_mg2 = false;
 var diferenciador_verifica = false;
 var verificador_win = false;
 var verificador_win_mg1 = false;
-
+//-----SOROS
+var nivel_soro=0;
+var porcento_soro=0;
+var multiplicador=0;
+var qtd_multiplicador=0;
+var verificador_soro=false;
+var conta_nivel_soro=0;
+var backup_e1;
+//-----CICLOS
+var conta_ciclos=0;
 //Globais referente ao funcionamento interno do software
 var limite = 1000;
 var executa;
@@ -426,6 +883,10 @@ document.getElementById("avisos").innerHTML = "Carregando dados da conta...";
 document.getElementById('stop_win').value = 0;
 document.getElementById('stop_loss').value = 0;
 conexao_iq(tipo_conta);
+sleep(10000).then(() => {
+    document.getElementById('saldo_inicial').innerHTML = saldo;
+    saldo_inicial = saldo;
+});
 
 
 //------------------------------------
@@ -454,18 +915,16 @@ function inicia(){
     if (document.getElementById('m1').checked==true) {
         tipo_vela=60
 
-        if(document.getElementById('mg').checked == true){
+    if(document.getElementById('mg').checked == true){
 
             executa = setInterval(function() {
                 var date = new Date();
                 var min = date.getMinutes();
                 var sec = date.getSeconds();
-                //orientador++;
-                //console.log("orientador: "+orientador);
-        
-                var e1 = document.getElementById('entrada').value;
-                var e2 = document.getElementById('mg1').value;
-                var e3 = document.getElementById('mg2').value;
+              
+                e1 = document.getElementById('entrada').value;
+                e2 = document.getElementById('mg1').value;
+                e3 = document.getElementById('mg2').value;
                 e1 = parseFloat(e1);
                 e2 = parseFloat(e2);
                 e3 = parseFloat(e3);
@@ -478,6 +937,7 @@ function inicia(){
                     
                 }
             }
+
             if (min%5==0 && sec>20 && diferenciador_mg1==false) {
                 if (diferenciador==true) {
                     main_code_mg1();
@@ -524,8 +984,275 @@ function inicia(){
         },
         limite);
     }
+    
+    if(document.getElementById('soros').checked == true){
+
+        executa = setInterval(function() {
+            var date = new Date();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+
+            e1 = parseInt(e1);
+            e2 = parseInt(e2);
+            e3 = parseInt(e3);
+            
+        if(min%5==4){
+            if(diferenciador==false){
+                
+                diferenciador=true; 
+                main_code_soros();
+               
+            }
+        }
+        if (min%5==0 && sec>20 && diferenciador_mg1==false) {
+            if (diferenciador==true) {
+                main_code_soros_mg1();
+                diferenciador_mg1=true;
+                
+            }
+        }
+        
+        if (diferenciador==true && diferenciador_mg1==true) {
+            if (verificador_win==false) {
+                if(diferenciador_mg2==false && verificador_win==false){
+                    if(min%5==1){
+                    diferenciador_mg2=true;
+                    
+                    main_code_soros_mg2();
+                    
+                    }
+                }
+            }
+        }
+        
+        if (diferenciador == true && diferenciador_mg1==true) {
+            if (verificador_win==false && verificador_win_mg1==false) {
+                if(diferenciador_mg2==true) {
+                    if(diferenciador_verifica==false){
+                        if(min%5==2){
+                            main_code_soros_verifica();
+                            diferenciador_verifica=true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (min%5==3) {
+            diferenciador=false;
+            diferenciador_mg1=false;
+            diferenciador_mg2=false;
+            diferenciador_verifica=false;
+            verificador_win=false;
+            verificador_win_mg1=false;
+    
+        }
+    },
+    limite);
+    }
+
+    if(document.getElementById('ciclos').checked == true){
+
+        executa = setInterval(function() {
+            var date = new Date();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+                
+            
+
+            if (conta_ciclos==0) {
+                e1 = document.getElementById('ciclo1_mg0').value;
+                e2 = document.getElementById('ciclo1_mg1').value;
+                e3 = document.getElementById('ciclo1_mg2').value;
+            }
+            if (conta_ciclos==1) {
+                e1 = document.getElementById('ciclo2_mg0').value;
+                e2 = document.getElementById('ciclo2_mg1').value;
+                e3 = document.getElementById('ciclo2_mg2').value;
+            }
+            if (conta_ciclos==2) {
+                e1 = document.getElementById('ciclo3_mg0').value;
+                e2 = document.getElementById('ciclo3_mg1').value;
+                e3 = document.getElementById('ciclo3_mg2').value;
+            }
+            if (conta_ciclos==3) {
+                e1 = document.getElementById('ciclo4_mg0').value;
+                e2 = document.getElementById('ciclo4_mg1').value;
+                e3 = document.getElementById('ciclo4_mg2').value;
+            }
+            if (conta_ciclos==4) {
+                e1 = document.getElementById('ciclo5_mg0').value;
+                e2 = document.getElementById('ciclo5_mg1').value;
+                e3 = document.getElementById('ciclo5_mg2').value;
+            }
+
+
+            e1 = parseInt(e1);
+            e2 = parseInt(e2);
+            e3 = parseInt(e3);
+            
+        if(min%5==4){
+            if(diferenciador==false){
+                
+                diferenciador=true; 
+                main_code_ciclos();
+                console.log("e1:"+e1);
+                console.log("e2:"+e2);
+                console.log("e3:"+e3);
+            }
+        }
+        if (min%5==0 && sec>20 && diferenciador_mg1==false) {
+            if (diferenciador==true) {
+                main_code_ciclos_mg1();
+                diferenciador_mg1=true;
+                console.log("e1:"+e1);
+                console.log("e2:"+e2);
+                console.log("e3:"+e3);
+            }
+        }
+        
+        if (diferenciador==true && diferenciador_mg1==true) {
+            if (verificador_win==false) {
+                if(diferenciador_mg2==false && verificador_win==false){
+                    if(min%5==1){
+                    diferenciador_mg2=true;
+                    
+                    main_code_ciclos_mg2();
+                    console.log("e1:"+e1);
+                console.log("e2:"+e2);
+                console.log("e3:"+e3);
+                    }
+                }
+            }
+        }
+        
+        if (diferenciador == true && diferenciador_mg1==true) {
+            if (verificador_win==false && verificador_win_mg1==false) {
+                if(diferenciador_mg2==true) {
+                    if(diferenciador_verifica==false){
+                        if(min%5==2){
+                            main_code_ciclos_verifica();
+                            diferenciador_verifica=true;
+                            console.log("e1:"+e1);
+                console.log("e2:"+e2);
+                console.log("e3:"+e3);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (min%5==3) {
+            diferenciador=false;
+            diferenciador_mg1=false;
+            diferenciador_mg2=false;
+            diferenciador_verifica=false;
+            verificador_win=false;
+            verificador_win_mg1=false;
+            
+        }
+    },
+    limite);
+    }
+
+    if(document.getElementById('ciclosoros').checked == true){
+
+        executa = setInterval(function() {
+            var date = new Date();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+
+            if (conta_ciclos==0) {
+                if (conta_nivel_soro=0) {
+                    e1 = document.getElementById('ciclo1_mg0').value;   
+                }
+                e2 = document.getElementById('ciclo1_mg1').value;
+                e3 = document.getElementById('ciclo1_mg2').value;
+            }
+            if (conta_ciclos==1) {
+                e1 = document.getElementById('ciclo2_mg0').value;
+                e2 = document.getElementById('ciclo2_mg1').value;
+                e3 = document.getElementById('ciclo2_mg2').value;
+            }
+            if (conta_ciclos==2) {
+                e1 = document.getElementById('ciclo3_mg0').value;
+                e2 = document.getElementById('ciclo3_mg1').value;
+                e3 = document.getElementById('ciclo3_mg2').value;
+            }
+            if (conta_ciclos==3) {
+                e1 = document.getElementById('ciclo4_mg0').value;
+                e2 = document.getElementById('ciclo4_mg1').value;
+                e3 = document.getElementById('ciclo4_mg2').value;
+            }
+            if (conta_ciclos==4) {
+                e1 = document.getElementById('ciclo5_mg0').value;
+                e2 = document.getElementById('ciclo5_mg1').value;
+                e3 = document.getElementById('ciclo5_mg2').value;
+            }
+
+
+            e1 = parseInt(e1);
+            e2 = parseInt(e2);
+            e3 = parseInt(e3);
+            
+        if(min%5==4){
+            if(diferenciador==false){
+                
+                diferenciador=true; 
+                main_code_ciclosoros();
+                
+               
+            }
+        }
+        if (min%5==0 && sec>20 && diferenciador_mg1==false) {
+            if (diferenciador==true) {
+                main_code_ciclosoros_mg1();
+                diferenciador_mg1=true;
+                
+            }
+        }
+        
+        if (diferenciador==true && diferenciador_mg1==true) {
+            if (verificador_win==false) {
+                if(diferenciador_mg2==false && verificador_win==false){
+                    if(min%5==1){
+                    diferenciador_mg2=true;
+                    
+                    main_code_ciclosoros_mg2();
+                    
+                    }
+                }
+            }
+        }
+        
+        if (diferenciador == true && diferenciador_mg1==true) {
+            if (verificador_win==false && verificador_win_mg1==false) {
+                if(diferenciador_mg2==true) {
+                    if(diferenciador_verifica==false){
+                        if(min%5==2){
+                            main_code_ciclosoros_verifica();
+                            diferenciador_verifica=true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (min%5==3) {
+            diferenciador=false;
+            diferenciador_mg1=false;
+            diferenciador_mg2=false;
+            diferenciador_verifica=false;
+            verificador_win=false;
+            verificador_win_mg1=false;
+    
+        }
+    },
+    limite);
+    }
 
     }
+    //------------------------------------------------------------------------------//
     if (document.getElementById('m5').checked==true) {
     tipo_vela=300
 
@@ -594,6 +1321,74 @@ function inicia(){
     },
     limite);
     }
+
+    if(document.getElementById('soros').checked == true){
+
+        executa = setInterval(function() {
+            var date = new Date();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+
+            e1 = parseInt(e1);
+            e2 = parseInt(e2);
+            e3 = parseInt(e3);
+            
+        if(min==59 || min==24){
+            if(diferenciador==false){
+                
+                diferenciador=true; 
+                main_code_soros();
+               
+            }
+        }
+        if ((min==4 || min==29) && diferenciador_mg1==false) {
+            if (diferenciador==true) {
+                main_code_soros_mg1();
+                diferenciador_mg1=true;
+                
+            }
+        }
+        
+        if (diferenciador==true && diferenciador_mg1==true) {
+            if (verificador_win==false) {
+                if(diferenciador_mg2==false && verificador_win==false){
+                    if(min==9 || min==34){
+                    diferenciador_mg2=true;
+                    
+                    main_code_soros_mg2();
+                    
+                    }
+                }
+            }
+        }
+        
+        if (diferenciador == true && diferenciador_mg1==true) {
+            if (verificador_win==false && verificador_win_mg1==false) {
+                if(diferenciador_mg2==true) {
+                    if(diferenciador_verifica==false){
+                        if(min==14 || min==39){
+                            main_code_soros_verifica();
+                            diferenciador_verifica=true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (min==20 || min==55) {
+            diferenciador=false;
+            diferenciador_mg1=false;
+            diferenciador_mg2=false;
+            diferenciador_verifica=false;
+            verificador_win=false;
+            verificador_win_mg1=false;
+            verifica_stop();
+
+        }
+    },
+    limite);
+    }
+
     }
 
 }
