@@ -82,7 +82,7 @@ function verifica_stop(){
      }
 
      gera_ganho();
-     console.log("ganhos:"+ganhos);
+     
 }
 
 
@@ -414,7 +414,7 @@ function main_code_ciclos_mg1(){
            
             verificador_win=false;
 
-    
+            
         }
         if(message=="lossmg0"){
             verificador_win=true;
@@ -516,9 +516,7 @@ function main_code_ciclosoros(){
     sapmhi_py.on('message', function(message){
         console.log("1 Entrada");
         ordem_executada = message + "";
-        sleep(5000).then(() => {
-            verifica_stop();
-        });
+        
     })
 }
 function main_code_ciclosoros_mg1(){
@@ -543,16 +541,21 @@ function main_code_ciclosoros_mg1(){
 
             verificador_win=true;
 
-            conta_ciclos=0;
+            console.log("conta_nivel_soro:"+conta_nivel_soro+"     nivel_soro:"+nivel_soro);
+            console.log("conta_ciclos:"+conta_ciclos);
+            if(conta_ciclos==0){
             if(conta_nivel_soro<nivel_soro){
                 
                 var lucro = e1*profit;
                 e1 = e1+(lucro*porcento_soro);
                 conta_nivel_soro++;
+
             }else{
                 e1 = document.getElementById('ciclo1_mg0').value;
                 conta_nivel_soro=0;
             }
+            }
+            conta_ciclos=0;
         }
         if(message=="loss"){
             verificador_win=false;
@@ -575,9 +578,7 @@ function main_code_ciclosoros_mg1(){
                 conta_nivel_soro=0;
         }
 
-        sleep(5000).then(() => {
-            verifica_stop();
-        });
+        verifica_stop();
 
     })
 }
@@ -616,9 +617,7 @@ function main_code_ciclosoros_mg2(){
             conta_ciclos++;
         }
 
-        sleep(5000).then(() => {
-            verifica_stop();
-        });
+        verifica_stop();
     })
 }
 function main_code_ciclosoros_verifica(){
@@ -645,9 +644,7 @@ function main_code_ciclosoros_verifica(){
             console.log("XXX- LOSS -XXX");
             conta_ciclos++;
         }
-        sleep(5000).then(() => {
-            verifica_stop();
-        });
+        verifica_stop();
     })
 }
 //------------------------------------
@@ -840,7 +837,7 @@ function gera_mg_soro(){
 
 //------------------------------------
 //Globais referente aos campos da interface
-var ativo_selecionado = "EURUSD";//queryString("nomeAtivo");
+var ativo_selecionado = queryString("nomeAtivo");
 var tipo_conta = "PRACTICE";                                
 var email="";
 var saldo=0;
@@ -912,7 +909,7 @@ limite);*/
  
 function inicia(){  
     console.log("O ROBO COMECOU A OPERAR");
-    if (document.getElementById('m1').checked==true) {
+if (document.getElementById('m1').checked==true) {
         tipo_vela=60
 
     if(document.getElementById('mg').checked == true){
@@ -979,7 +976,9 @@ function inicia(){
                 diferenciador_verifica=false;
                 verificador_win=false;
                 verificador_win_mg1=false;
-        
+                if (sec==15) {
+                    verifica_stop();
+                }
             }
         },
         limite);
@@ -1004,6 +1003,7 @@ function inicia(){
                
             }
         }
+
         if (min%5==0 && sec>20 && diferenciador_mg1==false) {
             if (diferenciador==true) {
                 main_code_soros_mg1();
@@ -1045,7 +1045,9 @@ function inicia(){
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-    
+            if (sec==15) {
+                verifica_stop();
+            }
         }
     },
     limite);
@@ -1085,7 +1087,9 @@ function inicia(){
                 e2 = document.getElementById('ciclo5_mg1').value;
                 e3 = document.getElementById('ciclo5_mg2').value;
             }
-
+            if (conta_ciclos>=5) {
+                conta_ciclos=0;
+            }
 
             e1 = parseInt(e1);
             e2 = parseInt(e2);
@@ -1096,18 +1100,14 @@ function inicia(){
                 
                 diferenciador=true; 
                 main_code_ciclos();
-                console.log("e1:"+e1);
-                console.log("e2:"+e2);
-                console.log("e3:"+e3);
+                
             }
         }
         if (min%5==0 && sec>20 && diferenciador_mg1==false) {
             if (diferenciador==true) {
                 main_code_ciclos_mg1();
                 diferenciador_mg1=true;
-                console.log("e1:"+e1);
-                console.log("e2:"+e2);
-                console.log("e3:"+e3);
+               
             }
         }
         
@@ -1118,9 +1118,7 @@ function inicia(){
                     diferenciador_mg2=true;
                     
                     main_code_ciclos_mg2();
-                    console.log("e1:"+e1);
-                console.log("e2:"+e2);
-                console.log("e3:"+e3);
+                   
                     }
                 }
             }
@@ -1133,9 +1131,7 @@ function inicia(){
                         if(min%5==2){
                             main_code_ciclos_verifica();
                             diferenciador_verifica=true;
-                            console.log("e1:"+e1);
-                console.log("e2:"+e2);
-                console.log("e3:"+e3);
+                        
                         }
                     }
                 }
@@ -1149,7 +1145,9 @@ function inicia(){
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-            
+            if (sec==15) {
+                verifica_stop();
+            }
         }
     },
     limite);
@@ -1163,7 +1161,7 @@ function inicia(){
             var sec = date.getSeconds();
 
             if (conta_ciclos==0) {
-                if (conta_nivel_soro=0) {
+                if (conta_nivel_soro==0) {
                     e1 = document.getElementById('ciclo1_mg0').value;   
                 }
                 e2 = document.getElementById('ciclo1_mg1').value;
@@ -1189,7 +1187,9 @@ function inicia(){
                 e2 = document.getElementById('ciclo5_mg1').value;
                 e3 = document.getElementById('ciclo5_mg2').value;
             }
-
+            if (conta_ciclos>=5) {
+                conta_ciclos=0;
+            }
 
             e1 = parseInt(e1);
             e2 = parseInt(e2);
@@ -1245,15 +1245,18 @@ function inicia(){
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-    
+            if (sec==15) {
+                verifica_stop();
+            }
         }
+        
     },
     limite);
     }
 
-    }
+}
     //------------------------------------------------------------------------------//
-    if (document.getElementById('m5').checked==true) {
+if (document.getElementById('m5').checked==true) {
     tipo_vela=300
 
     if(document.getElementById('mg').checked == true){
@@ -1316,7 +1319,9 @@ function inicia(){
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-    
+            if (sec==15) {
+                verifica_stop();
+            }
         }
     },
     limite);
@@ -1382,14 +1387,216 @@ function inicia(){
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-            verifica_stop();
-
+            if (sec==15) {
+                verifica_stop();
+            }
         }
     },
     limite);
     }
 
+    if(document.getElementById('ciclos').checked == true){
+
+        executa = setInterval(function() {
+            var date = new Date();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+                
+            
+
+            if (conta_ciclos==0) {
+                e1 = document.getElementById('ciclo1_mg0').value;
+                e2 = document.getElementById('ciclo1_mg1').value;
+                e3 = document.getElementById('ciclo1_mg2').value;
+            }
+            if (conta_ciclos==1) {
+                e1 = document.getElementById('ciclo2_mg0').value;
+                e2 = document.getElementById('ciclo2_mg1').value;
+                e3 = document.getElementById('ciclo2_mg2').value;
+            }
+            if (conta_ciclos==2) {
+                e1 = document.getElementById('ciclo3_mg0').value;
+                e2 = document.getElementById('ciclo3_mg1').value;
+                e3 = document.getElementById('ciclo3_mg2').value;
+            }
+            if (conta_ciclos==3) {
+                e1 = document.getElementById('ciclo4_mg0').value;
+                e2 = document.getElementById('ciclo4_mg1').value;
+                e3 = document.getElementById('ciclo4_mg2').value;
+            }
+            if (conta_ciclos==4) {
+                e1 = document.getElementById('ciclo5_mg0').value;
+                e2 = document.getElementById('ciclo5_mg1').value;
+                e3 = document.getElementById('ciclo5_mg2').value;
+            }
+            if (conta_ciclos>=5) {
+                conta_ciclos=0;
+            }
+
+            e1 = parseInt(e1);
+            e2 = parseInt(e2);
+            e3 = parseInt(e3);
+            
+        if(min==59 || min==24){
+            if(diferenciador==false){
+                
+                diferenciador=true; 
+                main_code_ciclos();
+                
+            }
+        }
+        if ((min==4 || min==29) && diferenciador_mg1==false) {
+            if (diferenciador==true) {
+                main_code_ciclos_mg1();
+                diferenciador_mg1=true;
+               
+            }
+        }
+        
+        if (diferenciador==true && diferenciador_mg1==true) {
+            if (verificador_win==false) {
+                if(diferenciador_mg2==false && verificador_win==false){
+                    if(min==9 || min==34){
+                    diferenciador_mg2=true;
+                    
+                    main_code_ciclos_mg2();
+                   
+                    }
+                }
+            }
+        }
+        
+        if (diferenciador == true && diferenciador_mg1==true) {
+            if (verificador_win==false && verificador_win_mg1==false) {
+                if(diferenciador_mg2==true) {
+                    if(diferenciador_verifica==false){
+                        if(min==14 || min==39){
+                            main_code_ciclos_verifica();
+                            diferenciador_verifica=true;
+                        
+                        }
+                    }
+                }
+            }
+        }
+
+        if (min==20 || min==55) {
+            diferenciador=false;
+            diferenciador_mg1=false;
+            diferenciador_mg2=false;
+            diferenciador_verifica=false;
+            verificador_win=false;
+            verificador_win_mg1=false;
+            if (sec==15) {
+                verifica_stop();
+            }
+        }
+    },
+    limite);
     }
+
+    if(document.getElementById('ciclosoros').checked == true){
+
+        executa = setInterval(function() {
+            var date = new Date();
+            var min = date.getMinutes();
+            var sec = date.getSeconds();
+
+            if (conta_ciclos==0) {
+                if (conta_nivel_soro==0) {
+                    e1 = document.getElementById('ciclo1_mg0').value;   
+                }
+                e2 = document.getElementById('ciclo1_mg1').value;
+                e3 = document.getElementById('ciclo1_mg2').value;
+            }
+            if (conta_ciclos==1) {
+                e1 = document.getElementById('ciclo2_mg0').value;
+                e2 = document.getElementById('ciclo2_mg1').value;
+                e3 = document.getElementById('ciclo2_mg2').value;
+            }
+            if (conta_ciclos==2) {
+                e1 = document.getElementById('ciclo3_mg0').value;
+                e2 = document.getElementById('ciclo3_mg1').value;
+                e3 = document.getElementById('ciclo3_mg2').value;
+            }
+            if (conta_ciclos==3) {
+                e1 = document.getElementById('ciclo4_mg0').value;
+                e2 = document.getElementById('ciclo4_mg1').value;
+                e3 = document.getElementById('ciclo4_mg2').value;
+            }
+            if (conta_ciclos==4) {
+                e1 = document.getElementById('ciclo5_mg0').value;
+                e2 = document.getElementById('ciclo5_mg1').value;
+                e3 = document.getElementById('ciclo5_mg2').value;
+            }
+            if (conta_ciclos>=5) {
+                conta_ciclos=0;
+            }
+
+            e1 = parseInt(e1);
+            e2 = parseInt(e2);
+            e3 = parseInt(e3);
+            
+        if(min==59 || min==24){
+            if(diferenciador==false){
+                
+                diferenciador=true; 
+                main_code_ciclosoros();
+                
+               
+            }
+        }
+        if ((min==4 || min==29) && diferenciador_mg1==false) {
+            if (diferenciador==true) {
+                main_code_ciclosoros_mg1();
+                diferenciador_mg1=true;
+                
+            }
+        }
+        
+        if (diferenciador==true && diferenciador_mg1==true) {
+            if (verificador_win==false) {
+                if(diferenciador_mg2==false && verificador_win==false){
+                    if(min==9 || min==34){
+                    diferenciador_mg2=true;
+                    
+                    main_code_ciclosoros_mg2();
+                    
+                    }
+                }
+            }
+        }
+        
+        if (diferenciador == true && diferenciador_mg1==true) {
+            if (verificador_win==false && verificador_win_mg1==false) {
+                if(diferenciador_mg2==true) {
+                    if(diferenciador_verifica==false){
+                        if(min==14 || min==39){
+                            main_code_ciclosoros_verifica();
+                            diferenciador_verifica=true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (min==20 || min==55) {
+            diferenciador=false;
+            diferenciador_mg1=false;
+            diferenciador_mg2=false;
+            diferenciador_verifica=false;
+            verificador_win=false;
+            verificador_win_mg1=false;
+            if (sec==15) {
+                verifica_stop();
+            }
+        }
+        
+    },
+    limite);
+    }
+
+}
 
 }
 
