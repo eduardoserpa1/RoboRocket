@@ -1,11 +1,19 @@
 body{
-    background-color: #20283b;
+    background-image: url("../img/background_rocket.png");
     font-family: Roboto Thin;
     color: white;
 }
 h1,h3{
     text-align: center;
 }
+
+input:focus{outline:none}
+button:focus {outline:none}
+select:focus {outline:none}
+option:focus {outline:none}
+
+
+
 .info_inputs:hover{
     background-color: #41495c;
 }
@@ -94,4 +102,41 @@ h1,h3{
 #qtd_ativos{
     opacity: 50%;
 }
+#div_botao_sair{
+    width: 80px;
+    height: 80px;   
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
+#botao:active{
+    background-color: #2e344b;
+}
 
+#botao_sair{
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+}
+#botao_sair{
+    font-family: Roboto;
+    font-size: 20px;
+    width: 120px;
+    height: 80px;
+    cursor: pointer;
+    color: white;
+    background-color: #373e51;
+    border: solid 1px #1d2233;
+    border-radius: 5px;
+}
+#botao_sair:hover{
+    background-color: #41495c;
+    width: 118px;
+    height: 78px;
+    border-radius: 8px;
+    margin-top: 1px;
+    margin-left: 1px;
+}
+#botao_sair:active{
+    background-color: #2e344b;
+}

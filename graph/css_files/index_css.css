@@ -1,0 +1,206 @@
+/*tag*/
+body{
+    background-image: url("../img/background_rocket.png");
+  
+    color: white;
+    font-family: Roboto thin;
+}
+/*class*/
+.bloco{
+    /*background-color: #191e2e;*/
+    background-color: #1b2134;
+    border: solid 1px #1b2336;
+    border-radius: 15px;
+}
+/*id*/
+#bloco_info{
+    font-size: 18px;
+    position: absolute;
+    padding: 10px;
+    width: 550px;
+    height: 90px;
+}
+#bloco_input{
+    font-size: 18px;
+    position: absolute;
+    padding: 10px;
+    width: 560px;
+    height: 90px;
+    right: 0;
+    margin-right: 10px;
+}
+#bloco_input input[type="number"]{
+    width: 70px;
+    height: 13px;
+    border: solid 1px lightgray;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 2px 2px 2px 2px;
+    text-align: center;
+}
+#div1{
+    width: 150px;
+    height: 45px;
+    position: absolute;
+}
+#div2{
+    width: 300px;
+    height: 45px;
+    position: absolute;
+    margin-left: 150px;
+}
+#div3{
+    
+    margin-left: 5px;
+    width: 540px;
+    height: 45px;
+    position: absolute;
+    margin-top: 45px;
+}
+#div4{
+
+    width: 180px;
+    height: 45px;
+    position: absolute;
+    margin-right: 30px;
+    right: 0;
+}
+#bloco_estrategias{
+    
+    font-size: 18px;
+    position: absolute;
+    padding: 10px;
+    width: 550px;
+    height: 432px;
+    margin-top: 130px;
+}
+#bloco_estrategias input[type="number"]{
+    width: 60px;
+    height: 13px;
+    border: solid 1px lightgray;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 2px 2px 2px 2px;
+    text-align: center;
+}
+#div_e1{
+    width: 100%;
+    height: 20%;
+}
+#div_e1_item1{
+    margin-top: 10px;
+    position: absolute;
+    left: 0;
+    width: 150px;
+    height: 60px;
+    margin-left: 15%;
+
+    
+}
+#div_e1_item2{
+    margin-top: 10px;
+    position: absolute;
+    right: 0;
+    width: 150px;
+    height: 60px;
+    margin-right: 15%;
+    
+}
+#div_e2{
+    position: absolute;
+
+    width: 180px;
+    height: 115px;
+    left: 0;
+    margin-left: 70px;
+}
+#div_e2 input{
+    right: 0;
+    margin-left: 30px;
+}
+#div_e3{
+    position: absolute;
+    right: 0;
+
+    width: 250px;
+    height: 160px;
+    margin-right: 20px;
+    
+    padding-left: 18px;
+    border-left: solid 1px #131825;
+}
+#div_e4{
+    text-align: center;
+    position: absolute;
+    
+    width: 550px;
+    height: 170px;
+    margin-top: 120px;
+    padding-top: 8px;
+    border-top: solid 1px #131825;
+    
+}
+#div_grade{ 
+    margin-bottom: -20px;
+    text-align: left;
+}
+#bloco_resultados{
+    right: 0;
+    margin-right: 10px;
+    font-size: 18px;
+    position: absolute;
+    padding: 10px;
+    width: 560px;
+    height: 350px;
+    margin-top: 130px;
+}
+#bloco_acoes{
+    right: 0;
+    bottom: 0;
+    margin-right: 10px;
+    font-size: 18px;
+    position: absolute;
+    padding: 10px;
+    width: 560px;
+    height: 45px;
+    margin-bottom: 8px;
+}
+#bloco_acao1{
+
+    position: absolute;
+    left: 0;
+    margin-left: 10px;
+}
+#bloco_acao2{
+   font-weight: bold;
+    position: absolute;
+    margin-left: 150px;
+}
+#bloco_acao3{
+    text-align: center;
+    
+    position: absolute;
+    width: 380px;
+    height: 50px;
+    margin-left: 200px;
+ }
+#bloco_acao3 button{
+    font-size: 18px;
+    
+    cursor: pointer;
+    text-align: center;
+    height: 40px;
+    width: 100px;
+    margin-top: 4px;
+    border: solid 1px #c0c0c0;
+    border-radius: 5px;
+ }
+ #bloco_acao3 button:hover{
+    border: solid 1px #c9c9c9;
+    background-color: #c9c9c9;
+   
+ }
+ #bloco_acao3 button:active{
+    background-color: #5c5c5c;
+    border: solid 1px #5c5c5c;
+ }

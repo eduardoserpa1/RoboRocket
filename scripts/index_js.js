@@ -29,6 +29,7 @@ function sleepjs(milliseconds) {
     }
 }
 
+
 //------------------------------------
 //Funções de verificação     interface/funcionamento
 
@@ -84,7 +85,6 @@ function verifica_stop(){
      gera_ganho();
      
 }
-
 
 //------------------------------------
 //Funções de entradas
@@ -380,7 +380,9 @@ function main_code_ciclos(){
     sapmhi_py.on('message', function(message){
         console.log("1 Entrada");
         ordem_executada = message + "";
-        
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
     })
 }
 function main_code_ciclos_mg1(){
@@ -426,7 +428,9 @@ function main_code_ciclos_mg1(){
         }
 
         
+        sleep(10000).then(() => {
             verifica_stop();
+        });
         
 
     })
@@ -467,7 +471,9 @@ function main_code_ciclos_mg2(){
         }
 
         
+        sleep(10000).then(() => {
             verifica_stop();
+        });
         
     })
 }
@@ -496,7 +502,9 @@ function main_code_ciclos_verifica(){
             conta_ciclos++;
         }
       
+        sleep(10000).then(() => {
             verifica_stop();
+        });
     
     })
 }
@@ -516,7 +524,9 @@ function main_code_ciclosoros(){
     sapmhi_py.on('message', function(message){
         console.log("1 Entrada");
         ordem_executada = message + "";
-        
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
     })
 }
 function main_code_ciclosoros_mg1(){
@@ -540,9 +550,6 @@ function main_code_ciclosoros_mg1(){
             console.log("--- WIN ---");
 
             verificador_win=true;
-
-            console.log("conta_nivel_soro:"+conta_nivel_soro+"     nivel_soro:"+nivel_soro);
-            console.log("conta_ciclos:"+conta_ciclos);
             if(conta_ciclos==0){
             if(conta_nivel_soro<nivel_soro){
                 
@@ -578,7 +585,9 @@ function main_code_ciclosoros_mg1(){
                 conta_nivel_soro=0;
         }
 
-        verifica_stop();
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
 
     })
 }
@@ -617,7 +626,9 @@ function main_code_ciclosoros_mg2(){
             conta_ciclos++;
         }
 
-        verifica_stop();
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
     })
 }
 function main_code_ciclosoros_verifica(){
@@ -644,7 +655,9 @@ function main_code_ciclosoros_verifica(){
             console.log("XXX- LOSS -XXX");
             conta_ciclos++;
         }
-        verifica_stop();
+        sleep(10000).then(() => {
+            verifica_stop();
+        });
     })
 }
 //------------------------------------
@@ -662,8 +675,12 @@ function trocaTipoConta(){
         document.getElementById('troca_tipo_conta').innerHTML = "TROCAR PARA REAL";
         document.getElementById('tipo_conta').innerHTML = "PRACTICE";
     }
-    console.log(tipo_conta);
+    
     conexao_iq(tipo_conta);
+    sleep(10000).then(() => {
+        document.getElementById('saldo_inicial').innerHTML = saldo;
+        saldo_inicial = saldo;
+    });
     
 }
 function calculaStop_w(valor){
@@ -680,7 +697,7 @@ function calculaStop_w(valor){
         var porcento = parseFloat(valor/100);
         var qtd_aumento = parseFloat(saldo*porcento);
         var r = parseFloat(parseFloat(saldo) + parseFloat(qtd_aumento));
-        document.getElementById('total_stop_win').innerHTML = r.toFixed(2) + "  -  Lucro: $"+qtd_aumento.toFixed(2);
+        document.getElementById('total_stop_win').innerHTML = "&nbsp&nbsp&nbsp" + r.toFixed(2) + "  -  Lucro: $"+qtd_aumento.toFixed(2);
         stop_win = r.toFixed(2);
     }
     if (radio == 'valor') {
@@ -703,7 +720,7 @@ function calculaStop_l(valor){
         var porcento = parseFloat(valor/100);
         var qtd_aumento = parseFloat(saldo*porcento);
         var r = parseFloat(saldo-qtd_aumento);
-        document.getElementById('total_stop_loss').innerHTML = r.toFixed(2) + "  -  Prejuizo: $"+qtd_aumento.toFixed(2);
+        document.getElementById('total_stop_loss').innerHTML = "&nbsp" + r.toFixed(2) + "  -  Prejuízo: $"+qtd_aumento.toFixed(2);
         stop_loss = r.toFixed(2);
     }
     if (radio == 'valor') {
@@ -876,7 +893,7 @@ var executa;
 var tipo_vela;
 var ordem_executada="";
 //Determinações iniciais 
-document.getElementById("avisos").innerHTML = "Carregando dados da conta...";
+//document.getElementById("avisos").innerHTML = "Carregando dados da conta...";
 document.getElementById('stop_win').value = 0;
 document.getElementById('stop_loss').value = 0;
 conexao_iq(tipo_conta);
@@ -885,27 +902,7 @@ sleep(10000).then(() => {
     saldo_inicial = saldo;
 });
 
-
 //------------------------------------
-/*executa = setInterval(function() {
-    var date = new Date();
-    var min = date.getMinutes();
-    console.log("orientador: "+orientador++);
-
-
-    
-    if(min%5==4 && orientador>12){
-        if(diferenciador==false){
-            console.log("ENTRADA DISPARADA"); 
-
-            diferenciador=true;
-        }
-    }else{
-        diferenciador = false;
-    }
-
-},
-limite);*/
  
 function inicia(){  
     console.log("O ROBO COMECOU A OPERAR");
@@ -1599,7 +1596,6 @@ if (document.getElementById('m5').checked==true) {
 }
 
 }
-
 
 function para(){
     clearInterval(executa);
