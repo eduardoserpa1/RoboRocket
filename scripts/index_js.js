@@ -37,8 +37,19 @@ function envia_innerhtml(tipo_conta,saldo,email,ativo,profit){
     document.getElementById("tipo_conta").innerHTML = tipo_conta;   
     document.getElementById("saldo").innerHTML = saldo;
     document.getElementById("email").innerHTML = email;
-    document.getElementById("ativo").innerHTML = ativo;
-    document.getElementById("profit").innerHTML = profit*100 + "%";
+    
+    if (ativo!=undefined) {
+        document.getElementById("ativo").innerHTML = ativo;
+    } else {
+        document.getElementById("ativo").innerHTML = "<i style='font-size: 12px; opacity: 0.5; margin-bottom:5px;'>Execute o SAPMHI...</i>";
+    }
+    profit = parseFloat(profit);
+    if(profit>0 && profit<=100) {
+        document.getElementById("profit").innerHTML = profit*100 + "%"; 
+    }else{
+        document.getElementById("profit").innerHTML = "<i style='font-size: 12px; opacity: 0.5; margin-bottom:5px;'>Execute o SAPMHI...</i>";
+    }
+    
 }
 function conexao_iq(tipo_conta){
     
@@ -57,9 +68,11 @@ function conexao_iq(tipo_conta){
         email = aux[0];
         saldo = aux[1];
         profit = aux[2];
-
+        if(ativo_selecionado==undefined){
+        document.getElementById("avisos").innerHTML = "Dados carregados com sucesso, utilize o <b>SAPMHI</b> para escolher um ativo!";
+        }
         envia_innerhtml(tipo_conta,saldo,email,ativo_selecionado,profit);
-        document.getElementById("avisos").innerHTML = "Dados carregados com sucesso!";
+        
 
     })
 }
@@ -75,15 +88,91 @@ function verifica_stop(){
      if (stop_w<=saldo) {
          para();
          console.log("XXXXXXXXXXX   STOP WIN   XXXXXXXXXXX");
+         document.getElementById("avisos").innerHTML = "STOP WIN";
      }
 
      if (stop_l>=saldo) {
         para();
         console.log("XXXXXXXXXXX   STOP LOSS   XXXXXXXXXXX");
+        document.getElementById("avisos").innerHTML = "STOP WIN";
      }
 
      gera_ganho();
      
+}
+
+function desativa_inputs(){
+    document.getElementById('entrada').disabled = true;
+    document.getElementById('mg1').disabled = true;
+    document.getElementById('mg2').disabled = true;
+    document.getElementById('niveis').disabled = true;
+    document.getElementById('porcento_soros').disabled = true;
+    document.getElementById('entrada_soro').disabled = true;
+    document.getElementById('multiplicador').disabled = true;
+    document.getElementById('qtd_multiplicador').disabled = true;
+    document.getElementById('ciclo1_mg0').disabled = true;
+    document.getElementById('ciclo1_mg1').disabled = true;
+    document.getElementById('ciclo1_mg2').disabled = true;
+    document.getElementById('ciclo2_mg0').disabled = true;
+    document.getElementById('ciclo2_mg1').disabled = true;
+    document.getElementById('ciclo2_mg2').disabled = true;
+    document.getElementById('ciclo3_mg0').disabled = true;
+    document.getElementById('ciclo3_mg1').disabled = true;
+    document.getElementById('ciclo3_mg2').disabled = true;
+    document.getElementById('ciclo4_mg0').disabled = true;
+    document.getElementById('ciclo4_mg1').disabled = true;
+    document.getElementById('ciclo4_mg2').disabled = true;
+    document.getElementById('ciclo5_mg0').disabled = true;
+    document.getElementById('ciclo5_mg1').disabled = true;
+    document.getElementById('ciclo5_mg2').disabled = true;
+
+    document.getElementsByName('estrategia_radio').disabled = true;
+    document.getElementsByName('multiplicador').disabled = true;
+    document.getElementById('troca_tipo_conta').disabled = true;
+
+    document.getElementById('stop_win').disabled = true;
+    document.getElementById('stop_loss').disabled = true;
+    document.getElementById('delay').disabled = true;
+
+    document.getElementsByName('tempo_radio').disabled = true;
+    document.getElementById('sapmhi').disabled = true;
+
+}
+function ativa_inputs(){
+    document.getElementById('entrada').disabled = false;
+    document.getElementById('mg1').disabled = false;
+    document.getElementById('mg2').disabled = false;
+    document.getElementById('niveis').disabled = false;
+    document.getElementById('porcento_soros').disabled = false;
+    document.getElementById('entrada_soro').disabled = false;
+    document.getElementById('multiplicador').disabled = false;
+    document.getElementById('qtd_multiplicador').disabled = false;
+    document.getElementById('ciclo1_mg0').disabled = false;
+    document.getElementById('ciclo1_mg1').disabled = false;
+    document.getElementById('ciclo1_mg2').disabled = false;
+    document.getElementById('ciclo2_mg0').disabled = false;
+    document.getElementById('ciclo2_mg1').disabled = false;
+    document.getElementById('ciclo2_mg2').disabled = false;
+    document.getElementById('ciclo3_mg0').disabled = false;
+    document.getElementById('ciclo3_mg1').disabled = false;
+    document.getElementById('ciclo3_mg2').disabled = false;
+    document.getElementById('ciclo4_mg0').disabled = false;
+    document.getElementById('ciclo4_mg1').disabled = false;
+    document.getElementById('ciclo4_mg2').disabled = false;
+    document.getElementById('ciclo5_mg0').disabled = false;
+    document.getElementById('ciclo5_mg1').disabled = false;
+    document.getElementById('ciclo5_mg2').disabled = false;
+
+    document.getElementsByName('estrategia_radio').disabled = false;
+    document.getElementsByName('multiplicador').disabled = false;
+    document.getElementById('troca_tipo_conta').disabled = false;
+
+    document.getElementById('stop_win').disabled = false;
+    document.getElementById('stop_loss').disabled = false;
+    document.getElementById('delay').disabled = false;
+
+    document.getElementsByName('tempo_radio').disabled = false;
+    document.getElementById('sapmhi').disabled = false;
 }
 
 //------------------------------------
@@ -103,6 +192,22 @@ function main_code(){
 
     sapmhi_py.on('message', function(message){
         console.log("1 Entrada");
+
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
+
+        document.getElementById('div_resultados_op').innerHTML += "<div class='div_item' id='item_"+orientador+"'></div>";
+        document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  ENTRADA  ( $"+e1+" )</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
+        
         ordem_executada = message + "";
         sleep(10000).then(() => {
             verifica_stop();
@@ -124,23 +229,36 @@ function main_code_mg1(){
     var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
 
     sapmhi_py.on('message', function(message){
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
         
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if (message=='win') {
             verificador_win=true;
             console.log("--- WIN ---");
-            
+            f = e1*profit;
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN DIRETO  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
             verificador_win=true;
         }
         if(message=="loss"){
             verificador_win=false;
             console.log("MG1");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  1 MG  ( $"+e2+" )</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
             verificador_win=false;
         }
         if(message=="lossmg0"){
             verificador_win=true;
             console.log("XXX LOSS XXX");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win=true;
         }
 
@@ -165,21 +283,33 @@ function main_code_mg2(){
     var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-       
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e2*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if(message=='win'){
             verificador_win_mg1=true;
             console.log("--- WIN MG1 ---");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 1  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
         }
         if(message=="loss"){
             verificador_win_mg1=false;
             console.log("MG2");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  2 MG  ( $"+e3+" )</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         }
         if(message=="lossmg1"){
             verificador_win_mg1=true;
             console.log("XXX LOSS XXX");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win_mg1=true;
         }
 
@@ -203,13 +333,25 @@ function main_code_verifica(){
     var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
 
     sapmhi_py.on('message', function(message){
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e3*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if (message=="win") {
             console.log("--- WIN MG2 ---");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 2  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
         }
         if(message=="loss"){
             console.log("XXX- LOSS -XXX");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
         }
         sleep(10000).then(() => {
             verifica_stop();
@@ -231,6 +373,21 @@ function main_code_soros(){
 
     sapmhi_py.on('message', function(message){
         console.log("1 Entrada");
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
+
+        document.getElementById('div_resultados_op').innerHTML += "<div class='div_item' id='item_"+orientador+"'></div>";
+        document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  ENTRADA  ( $"+e1+" )</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
+        
         ordem_executada = message + "";
         sleep(10000).then(() => {
             verifica_stop();
@@ -252,10 +409,22 @@ function main_code_soros_mg1(){
     var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-        
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e1*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if (message=='win') {
             verificador_win=true;
             console.log("--- WIN ---");
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN DIRETO  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+            
             verificador_win=true;
 
             if(conta_nivel_soro<nivel_soro){
@@ -274,7 +443,8 @@ function main_code_soros_mg1(){
         if(message=="loss"){
             verificador_win=false;
             console.log("MG1");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  1 MG  ( $"+e2+" )</b></div>" + 
+            "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
             verificador_win=false;
 
             e1 = document.getElementById('entrada_soro').value;
@@ -284,7 +454,8 @@ function main_code_soros_mg1(){
         if(message=="lossmg0"){
             verificador_win=true;
             console.log("XXX LOSS XXX");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+            "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win=true;
 
             e1 = document.getElementById('entrada_soro').value;
@@ -313,21 +484,33 @@ function main_code_soros_mg2(){
     var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-       
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e2*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if(message=='win'){
             verificador_win_mg1=true;
             console.log("--- WIN MG1 ---");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 1  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
         }
         if(message=="loss"){
             verificador_win_mg1=false;
             console.log("MG2");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  2 MG  ( $"+e3+" )</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         }
         if(message=="lossmg1"){
             verificador_win_mg1=true;
             console.log("XXX LOSS XXX");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+            "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win_mg1=true;
         }
 
@@ -351,13 +534,25 @@ function main_code_soros_verifica(){
     var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
 
     sapmhi_py.on('message', function(message){
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e3*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if (message=="win") {
             console.log("--- WIN MG2 ---");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 2  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
         }
         if(message=="loss"){
             console.log("XXX- LOSS -XXX");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
         }
         sleep(10000).then(() => {
             verifica_stop();
@@ -379,6 +574,19 @@ function main_code_ciclos(){
 
     sapmhi_py.on('message', function(message){
         console.log("1 Entrada");
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
+        document.getElementById('div_resultados_op').innerHTML += "<div class='div_item' id='item_"+orientador+"'></div>";
+        document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  ENTRADA  ( $"+e1+" )</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         ordem_executada = message + "";
         sleep(10000).then(() => {
             verifica_stop();
@@ -400,11 +608,21 @@ function main_code_ciclos_mg1(){
     var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-        
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e1*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if (message=='win') {
             verificador_win=true;
             console.log("--- WIN ---");
-
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN DIRETO  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
             verificador_win=true;
 
             conta_ciclos=0;
@@ -413,7 +631,8 @@ function main_code_ciclos_mg1(){
         if(message=="loss"){
             verificador_win=false;
             console.log("MG1");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  1 MG  ( $"+e2+" )</b></div>" + 
+            "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
             verificador_win=false;
 
             
@@ -421,7 +640,8 @@ function main_code_ciclos_mg1(){
         if(message=="lossmg0"){
             verificador_win=true;
             console.log("XXX LOSS XXX");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+            "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win=true;
 
             conta_ciclos++;
@@ -450,21 +670,34 @@ function main_code_ciclos_mg2(){
     var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-       
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e2*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if(message=='win'){
             verificador_win_mg1=true;
             console.log("--- WIN MG1 ---");
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 1  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
             conta_ciclos=0;
         }
         if(message=="loss"){
             verificador_win_mg1=false;
             console.log("MG2");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  2 MG  ( $"+e3+" )</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         }
         if(message=="lossmg1"){
             verificador_win_mg1=true;
             console.log("XXX LOSS XXX");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+            "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win_mg1=true;
 
             conta_ciclos++;
@@ -492,13 +725,26 @@ function main_code_ciclos_verifica(){
     var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
 
     sapmhi_py.on('message', function(message){
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e3*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if (message=="win") {
             console.log("--- WIN MG2 ---");
             conta_ciclos=0;
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 2  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
         }
         if(message=="loss"){
             console.log("XXX- LOSS -XXX");
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             conta_ciclos++;
         }
       
@@ -523,6 +769,19 @@ function main_code_ciclosoros(){
 
     sapmhi_py.on('message', function(message){
         console.log("1 Entrada");
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
+        document.getElementById('div_resultados_op').innerHTML += "<div class='div_item' id='item_"+orientador+"'></div>";
+        document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  ENTRADA  ( $"+e1+" )</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         ordem_executada = message + "";
         sleep(10000).then(() => {
             verifica_stop();
@@ -544,11 +803,21 @@ function main_code_ciclosoros_mg1(){
     var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-        
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e1*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if (message=='win') {
             verificador_win=true;
             console.log("--- WIN ---");
-
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN DIRETO  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
             verificador_win=true;
             if(conta_ciclos==0){
             if(conta_nivel_soro<nivel_soro){
@@ -567,7 +836,8 @@ function main_code_ciclosoros_mg1(){
         if(message=="loss"){
             verificador_win=false;
             console.log("MG1");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  1 MG  ( $"+e2+" )</b></div>" + 
+            "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
             verificador_win=false;
 
             e1 = document.getElementById('ciclo1_mg0').value;
@@ -576,7 +846,8 @@ function main_code_ciclosoros_mg1(){
         if(message=="lossmg0"){
             verificador_win=true;
             console.log("XXX LOSS XXX");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+            "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win=true;
 
             conta_ciclos++;
@@ -606,21 +877,34 @@ function main_code_ciclosoros_mg2(){
     var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-       
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e2*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if(message=='win'){
             verificador_win_mg1=true;
             console.log("--- WIN MG1 ---");
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 1  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
             conta_ciclos=0;
         }
         if(message=="loss"){
             verificador_win_mg1=false;
             console.log("MG2");
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  2 MG  ( $"+e3+" )</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         }
         if(message=="lossmg1"){
             verificador_win_mg1=true;
             console.log("XXX LOSS XXX");
-           
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+            "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win_mg1=true;
 
             conta_ciclos++;
@@ -646,13 +930,26 @@ function main_code_ciclosoros_verifica(){
     var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
 
     sapmhi_py.on('message', function(message){
+        var date_p = new Date();
+        var hora_p = date_p.getHours();
+        var min_p = date_p.getMinutes();
+        f = e3*profit;
+        if (message=="p") {
+            ordem = "PUT"
+        }
+        if (message=="c") {
+            ordem = "CALL"
+        }
         if (message=="win") {
             console.log("--- WIN MG2 ---");
             conta_ciclos=0;
-            
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 2  + $"+f.toFixed(2)+"</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
         }
         if(message=="loss"){
             console.log("XXX- LOSS -XXX");
+            document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
+                                                                "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             conta_ciclos++;
         }
         sleep(10000).then(() => {
@@ -684,6 +981,7 @@ function trocaTipoConta(){
     
 }
 function calculaStop_w(valor){
+    
     var radio;
     valor = parseFloat(valor);
     if (document.getElementById('porcento').checked == true) {
@@ -707,6 +1005,7 @@ function calculaStop_w(valor){
     }
 }
 function calculaStop_l(valor){
+   
     var radio;
     valor = parseFloat(valor);
     if (document.getElementById('porcento').checked == true) {
@@ -729,17 +1028,62 @@ function calculaStop_l(valor){
         stop_loss = r.toFixed(2);
     }
 }
+function diferencia_metodo(){
+    if(document.getElementById('porcento').checked == true){
+        document.getElementById('stop_win').max = 1000;
+        document.getElementById('stop_loss').max = 1000;
+        if (document.getElementById('stop_win').value>1000) {
+            document.getElementById('stop_win').value=1000;
+        }
+        if (document.getElementById('stop_win').value<0) {
+            document.getElementById('stop_win').value=0;
+        }
+        if (document.getElementById('stop_loss').value>1000) {
+            document.getElementById('stop_loss').value=1000;
+        }
+        if (document.getElementById('stop_loss').value<0) {
+            document.getElementById('stop_loss').value=0;
+        }
+    }
+    if(document.getElementById('valor').checked == true){
+        document.getElementById('stop_win').max = 100000;
+        document.getElementById('stop_loss').max = 100000;
+        if (document.getElementById('stop_win').value>100000) {
+            document.getElementById('stop_win').value=100000;
+        }
+        if (document.getElementById('stop_win').value<0) {
+            document.getElementById('stop_win').value=0;
+        }
+        if (document.getElementById('stop_loss').value>100000) {
+            document.getElementById('stop_loss').value=100000;
+        }
+        if (document.getElementById('stop_loss').value<0) {
+            document.getElementById('stop_loss').value=0;
+        }
+    }
+}
 
 function seleciona_mg(){
     document.getElementById('entrada').disabled = false;
     document.getElementById('mg1').disabled = false;
     document.getElementById('mg2').disabled = false; 
 
+    document.getElementById('entrada').style = "background-color: #68ff81;";
+    document.getElementById('mg1').style = "background-color: #68ff81;";
+    document.getElementById('mg2').style = "background-color: #68ff81;"; 
+    
+
     document.getElementById('niveis').disabled = true;
     document.getElementById('porcento_soros').disabled = true;
     document.getElementById('entrada_soro').disabled = true;
     document.getElementById('multiplicador').disabled = true;
     document.getElementById('qtd_multiplicador').disabled = true;
+
+    document.getElementById('niveis').style = "background-color: #c94c4c;";
+    document.getElementById('porcento_soros').style = "background-color: #c94c4c;";
+    document.getElementById('entrada_soro').style = "background-color: #c94c4c;";
+    document.getElementById('multiplicador').style = "background-color: #c94c4c;";
+    document.getElementById('qtd_multiplicador').style = "background-color: #c94c4c;";
 
     document.getElementById('ciclo1_mg0').disabled = true;
     document.getElementById('ciclo1_mg1').disabled = true;
@@ -756,11 +1100,31 @@ function seleciona_mg(){
     document.getElementById('ciclo5_mg0').disabled = true;
     document.getElementById('ciclo5_mg1').disabled = true;
     document.getElementById('ciclo5_mg2').disabled = true;
+
+    document.getElementById('ciclo1_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo1_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo1_mg2').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo2_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo2_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo2_mg2').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo3_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo3_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo3_mg2').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo4_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo4_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo4_mg2').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo5_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo5_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo5_mg2').style = "background-color: #c94c4c;";
 }
 function seleciona_soros(){
     document.getElementById('entrada').disabled = true;
     document.getElementById('mg1').disabled = true;
     document.getElementById('mg2').disabled = true; 
+
+    document.getElementById('entrada').style = "background-color: #c94c4c;";
+    document.getElementById('mg1').style = "background-color: #c94c4c;";
+    document.getElementById('mg2').style = "background-color: #c94c4c;";
 
     document.getElementById('niveis').disabled = false;
     document.getElementById('porcento_soros').disabled = false;
@@ -768,6 +1132,12 @@ function seleciona_soros(){
     document.getElementById('multiplicador').disabled = false;
     document.getElementById('qtd_multiplicador').disabled = false;
 
+    document.getElementById('niveis').style = "background-color: #68ff81;"; 
+    document.getElementById('porcento_soros').style = "background-color: #68ff81;"; 
+    document.getElementById('entrada_soro').style = "background-color: #68ff81;"; 
+    document.getElementById('multiplicador').style = "background-color: #68ff81;"; 
+    document.getElementById('qtd_multiplicador').style = "background-color: #68ff81;"; 
+
     document.getElementById('ciclo1_mg0').disabled = true;
     document.getElementById('ciclo1_mg1').disabled = true;
     document.getElementById('ciclo1_mg2').disabled = true;
@@ -783,11 +1153,31 @@ function seleciona_soros(){
     document.getElementById('ciclo5_mg0').disabled = true;
     document.getElementById('ciclo5_mg1').disabled = true;
     document.getElementById('ciclo5_mg2').disabled = true;
+
+    document.getElementById('ciclo1_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo1_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo1_mg2').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo2_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo2_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo2_mg2').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo3_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo3_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo3_mg2').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo4_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo4_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo4_mg2').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo5_mg0').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo5_mg1').style = "background-color: #c94c4c;";
+    document.getElementById('ciclo5_mg2').style = "background-color: #c94c4c;";
 }
 function seleciona_ciclos(){
     document.getElementById('entrada').disabled = true;
     document.getElementById('mg1').disabled = true;
     document.getElementById('mg2').disabled = true; 
+
+    document.getElementById('entrada').style = "background-color: #c94c4c;";
+    document.getElementById('mg1').style = "background-color: #c94c4c;";
+    document.getElementById('mg2').style = "background-color: #c94c4c;"; 
 
     document.getElementById('niveis').disabled = true;
     document.getElementById('porcento_soros').disabled = true;
@@ -795,6 +1185,12 @@ function seleciona_ciclos(){
     document.getElementById('multiplicador').disabled = true;
     document.getElementById('qtd_multiplicador').disabled = true;
 
+    document.getElementById('niveis').style = "background-color: #c94c4c;";
+    document.getElementById('porcento_soros').style = "background-color: #c94c4c;";
+    document.getElementById('entrada_soro').style = "background-color: #c94c4c;";
+    document.getElementById('multiplicador').style = "background-color: #c94c4c;";
+    document.getElementById('qtd_multiplicador').style = "background-color: #c94c4c;";
+
     document.getElementById('ciclo1_mg0').disabled = false;
     document.getElementById('ciclo1_mg1').disabled = false;
     document.getElementById('ciclo1_mg2').disabled = false;
@@ -810,11 +1206,31 @@ function seleciona_ciclos(){
     document.getElementById('ciclo5_mg0').disabled = false;
     document.getElementById('ciclo5_mg1').disabled = false;
     document.getElementById('ciclo5_mg2').disabled = false;
+
+    document.getElementById('ciclo1_mg0').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo1_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo1_mg2').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo2_mg0').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo2_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo2_mg2').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo3_mg0').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo3_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo3_mg2').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo4_mg0').style = "background-color: #68ff81;";
+    document.getElementById('ciclo4_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo4_mg2').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo5_mg0').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo5_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo5_mg2').style = "background-color: #68ff81;"; 
 }
 function seleciona_ciclosoros(){
     document.getElementById('entrada').disabled = true;
     document.getElementById('mg1').disabled = true;
     document.getElementById('mg2').disabled = true; 
+
+    document.getElementById('entrada').style = "background-color: #c94c4c;";
+    document.getElementById('mg1').style = "background-color: #c94c4c;";
+    document.getElementById('mg2').style = "background-color: #c94c4c;"; 
 
     document.getElementById('niveis').disabled = false;
     document.getElementById('porcento_soros').disabled = false;
@@ -822,6 +1238,12 @@ function seleciona_ciclosoros(){
     document.getElementById('multiplicador').disabled = true;
     document.getElementById('qtd_multiplicador').disabled = true;
 
+    document.getElementById('niveis').style = "background-color: #68ff81;"; 
+    document.getElementById('porcento_soros').style = "background-color: #68ff81;"; 
+    document.getElementById('entrada_soro').style = "background-color: #c94c4c;";
+    document.getElementById('multiplicador').style = "background-color: #c94c4c;";
+    document.getElementById('qtd_multiplicador').style = "background-color: #c94c4c;";
+
     document.getElementById('ciclo1_mg0').disabled = false;
     document.getElementById('ciclo1_mg1').disabled = false;
     document.getElementById('ciclo1_mg2').disabled = false;
@@ -837,6 +1259,22 @@ function seleciona_ciclosoros(){
     document.getElementById('ciclo5_mg0').disabled = false;
     document.getElementById('ciclo5_mg1').disabled = false;
     document.getElementById('ciclo5_mg2').disabled = false;
+
+    document.getElementById('ciclo1_mg0').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo1_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo1_mg2').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo2_mg0').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo2_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo2_mg2').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo3_mg0').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo3_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo3_mg2').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo4_mg0').style = "background-color: #68ff81;";
+    document.getElementById('ciclo4_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo4_mg2').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo5_mg0').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo5_mg1').style = "background-color: #68ff81;"; 
+    document.getElementById('ciclo5_mg2').style = "background-color: #68ff81;"; 
 }
 
 function gera_mg_soro(){
@@ -893,19 +1331,24 @@ var executa;
 var tipo_vela;
 var ordem_executada="";
 //Determinações iniciais 
-//document.getElementById("avisos").innerHTML = "Carregando dados da conta...";
-document.getElementById('stop_win').value = 0;
-document.getElementById('stop_loss').value = 0;
+var orientador=0;
+var ordem="";
+document.getElementById("avisos").innerHTML = "Carregando dados da conta...";
+
 conexao_iq(tipo_conta);
 sleep(10000).then(() => {
     document.getElementById('saldo_inicial').innerHTML = saldo;
     saldo_inicial = saldo;
 });
+diferencia_metodo()
+
 
 //------------------------------------
  
 function inicia(){  
+    
     console.log("O ROBO COMECOU A OPERAR");
+    document.getElementById("avisos").innerHTML = "O Robô Rocket começou a operar!";
 if (document.getElementById('m1').checked==true) {
         tipo_vela=60
 
@@ -919,9 +1362,9 @@ if (document.getElementById('m1').checked==true) {
                 e1 = document.getElementById('entrada').value;
                 e2 = document.getElementById('mg1').value;
                 e3 = document.getElementById('mg2').value;
-                e1 = parseFloat(e1);
-                e2 = parseFloat(e2);
-                e3 = parseFloat(e3);
+                e1 = parseInt(e1);
+            e2 = parseInt(e2);
+            e3 = parseInt(e3);
     
             if(min%5==4){
                 if(diferenciador==false){
@@ -960,6 +1403,7 @@ if (document.getElementById('m1').checked==true) {
                             if(min%5==2){
                                 main_code_verifica();
                                 diferenciador_verifica=true;
+                                
                             }
                         }
                     }
@@ -973,10 +1417,13 @@ if (document.getElementById('m1').checked==true) {
                 diferenciador_verifica=false;
                 verificador_win=false;
                 verificador_win_mg1=false;
-                if (sec==15) {
-                    verifica_stop();
-                }
+                orientador++;
+                
             }
+            if(sec==10 || sec==30 || sec==50){
+                verifica_stop();
+            }
+            
         },
         limite);
     }
@@ -1042,9 +1489,11 @@ if (document.getElementById('m1').checked==true) {
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-            if (sec==15) {
-                verifica_stop();
-            }
+            orientador++;
+            
+        }
+        if(sec==10 || sec==30 || sec==50){
+            verifica_stop();
         }
     },
     limite);
@@ -1142,9 +1591,11 @@ if (document.getElementById('m1').checked==true) {
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-            if (sec==15) {
-                verifica_stop();
-            }
+            orientador++;
+            
+        }
+        if(sec==10 || sec==30 || sec==50){
+            verifica_stop();
         }
     },
     limite);
@@ -1242,9 +1693,12 @@ if (document.getElementById('m1').checked==true) {
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-            if (sec==15) {
-                verifica_stop();
-            }
+            orientador++;
+            
+        }
+       
+        if(sec==10 || sec==30 || sec==50){
+            verifica_stop();
         }
         
     },
@@ -1267,9 +1721,9 @@ if (document.getElementById('m5').checked==true) {
             var e1 = document.getElementById('entrada').value;
             var e2 = document.getElementById('mg1').value;
             var e3 = document.getElementById('mg2').value;
-            e1 = parseFloat(e1);
-            e2 = parseFloat(e2);
-            e3 = parseFloat(e3);
+            e1 = parseInt(e1);
+            e2 = parseInt(e2);
+            e3 = parseInt(e3);
 
         if(min==59 || min==24){
             if(diferenciador==false){
@@ -1316,9 +1770,11 @@ if (document.getElementById('m5').checked==true) {
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-            if (sec==15) {
-                verifica_stop();
-            }
+            orientador++;
+            
+        }
+        if(sec==15){
+            verifica_stop();
         }
     },
     limite);
@@ -1384,9 +1840,11 @@ if (document.getElementById('m5').checked==true) {
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-            if (sec==15) {
-                verifica_stop();
-            }
+            orientador++;
+            
+        }
+        if(sec==15){
+            verifica_stop();
         }
     },
     limite);
@@ -1484,9 +1942,11 @@ if (document.getElementById('m5').checked==true) {
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-            if (sec==15) {
-                verifica_stop();
-            }
+            orientador++;
+            
+        }
+        if(sec==15){
+            verifica_stop();
         }
     },
     limite);
@@ -1584,9 +2044,11 @@ if (document.getElementById('m5').checked==true) {
             diferenciador_verifica=false;
             verificador_win=false;
             verificador_win_mg1=false;
-            if (sec==15) {
-                verifica_stop();
-            }
+            orientador++;
+            
+        }
+        if(sec==15){
+            verifica_stop();
         }
         
     },
@@ -1600,6 +2062,8 @@ if (document.getElementById('m5').checked==true) {
 function para(){
     clearInterval(executa);
     console.log("O ROBO PAROU DE OPERAR");
+    document.getElementById("avisos").innerHTML = "O Robô Rocket parou de operar!";
+    
 }
 
 

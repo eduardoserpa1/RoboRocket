@@ -24,21 +24,21 @@
 
     <div class="bloco" id="bloco_input">
       <div id="div1">
-        <input type="radio" id="porcento" name="multiplicador" value="porcento" checked><label>Porcentagem</label>
-        <input type="radio" id="valor" name="multiplicador" value="valor"><label>Valor absoluto</label>
+        <input onclick="diferencia_metodo()" type="radio" id="porcento" name="multiplicador" value="porcento" checked><label>Porcentagem</label>
+        <input onclick="diferencia_metodo()" type="radio" id="valor" name="multiplicador" value="valor"><label>Valor absoluto</label>
     </div>
     <div id="div2">
-      <label>STOP WIN: &nbsp&nbsp&nbsp</label><input type="number" id="stop_win" onfocusout="calculaStop_w(this.value)">   
+      <label>STOP WIN: &nbsp&nbsp&nbsp</label><input type="number" id="stop_win" onfocusout="diferencia_metodo();calculaStop_w(this.value);" min="0" max="10000">   
       <br>
-      <label>STOP LOSS: &nbsp</label><input type="number" id="stop_loss" onfocusout="calculaStop_l(this.value)">   
+      <label>STOP LOSS: &nbsp</label><input type="number" id="stop_loss" onfocusout="diferencia_metodo();calculaStop_l(this.value);" min="0" max="10000">   
     </div>
     <div id="div3">
-      <label>Valor após STOP WIN: </label><b><label id="total_stop_win"></label></b>
+      <label>Saldo após STOP WIN: </label><b><label id="total_stop_win"> <i style="font-size: 12px; opacity: 0.5;">Informe no campo acima os dados para calcular stop win...</i> </label></b>
       <br>
-      <label>Valor após STOP LOSS: </label><b><label id="total_stop_loss"></label></b>
+      <label>Saldo após STOP LOSS: </label><b><label id="total_stop_loss"> <i style="font-size: 12px; opacity: 0.5;">Informe no campo acima os dados para calcular stop loss...</i> </label> </b>
     </div>
     <div id="div4">
-      <label>Ganhos:&nbsp <b>$</b></label><label id="ganhos">0</label>
+      <label>Ganhos:&nbsp <b>$</b>&nbsp</label><label id="ganhos">0</label>
       <br> 
       <label>Delay:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input type="number" id="delay" onfocusout="delay = this.value;" value="0">
     </div>
@@ -46,7 +46,7 @@
 
   <div class="bloco" id="bloco_estrategias">
     <div id="div_e1">
-      <label style="margin-left: 42%;">Estratégias </label>
+      <label style="margin-left: 42%;"><b>Estratégias</b> </label>
       <br>
       <div id="div_e1_item1">
         <input type="radio" id="mg" name="estrategia_radio" value="mg" onclick="seleciona_mg()" checked><label>MARTINGALE </label>
@@ -67,26 +67,26 @@
       <br>
       <br>
       
-      <label>ENTRADA</label><input type="number" id="entrada" onfocusout="e1 = this.value;" value="0">
+      <label>ENTRADA</label><input min="0" max="10000" type="number" id="entrada" onfocusout="e1 = this.value;" value="0" class="mg">
       <br>
-      <label>GALE 1 &nbsp&nbsp&nbsp&nbsp</label><input type="number" id="mg1" onfocusout="e2 = this.value;" value="0">
+      <label>GALE 1 &nbsp&nbsp&nbsp&nbsp</label><input min="0" max="10000" type="number" id="mg1" onfocusout="e2 = this.value;" value="0" class="mg">
       <br>
-      <label>GALE 2 &nbsp&nbsp&nbsp&nbsp</label><input type="number" id="mg2" onfocusout="e3 = this.value;" value="0">
+      <label>GALE 2 &nbsp&nbsp&nbsp&nbsp</label><input min="0" max="10000" type="number" id="mg2" onfocusout="e3 = this.value;" value="0" class="mg">
     </div>
   
     <div id="div_e3">
       <label style="margin-left: 30%;"><b>SOROS</b></label>
       <br>
       <br>
-      <label>NIVEIS &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input type="number" id="niveis" onfocusout="nivel_soro = this.value;" value="0" disabled>
+      <label>NIVEIS &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input min="0" max="100" type="number" id="niveis" onfocusout="nivel_soro = this.value;" value="0" class="soro" disabled>
       <br>
-      <label>% SOROS &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input type="number" id="porcento_soros" onfocusout="porcento_soro = (this.value)/100;" value="0" disabled>
+      <label>% SOROS &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input min="0" max="100" type="number" id="porcento_soros" onfocusout="porcento_soro = (this.value)/100;" value="0"class="soro" disabled>
       <br>
-      <label>ENTRADA &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input type="number" id="entrada_soro" onfocusout="e1 = this.value; gera_mg_soro();" value="0" disabled>
+      <label>ENTRADA &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input min="0" max="10000" type="number" id="entrada_soro" onfocusout="e1 = this.value; gera_mg_soro();" value="0"class="soro" disabled>
       <br>
-      <label>x MG&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input type="number" id="multiplicador" onfocusout="multiplicador = this.value; gera_mg_soro();" value="0" disabled>
+      <label>x MG&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input min="0" max="100" type="number" id="multiplicador"class="soro" onfocusout="multiplicador = this.value; gera_mg_soro();" value="0" disabled>
       <br>
-      <label>QTD MG &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input type="number" id="qtd_multiplicador" max="2" onfocusout="qtd_multiplicador = this.value; gera_mg_soro();" value="0" disabled>
+      <label>QTD MG &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label><input  type="number" id="qtd_multiplicador" max="2"class="soro" onfocusout="qtd_multiplicador = this.value; gera_mg_soro();" value="0" disabled>
     </div>
     <br>
     <br>
@@ -100,36 +100,52 @@
       </div>
       <br>
       <label>CICLO 1 </label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo1_mg0" onfocusout="e1 = this.value;" value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo1_mg1" onfocusout="e2 = this.value;" value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo1_mg2" onfocusout="e3 = this.value;" value="0" disabled>
+      <input min="0"type="number" id="ciclo1_mg0" onfocusout="e1 = this.value;" value="0" disabled class="ciclo"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo1_mg1" onfocusout="e2 = this.value;" value="0" disabled class="ciclo"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo1_mg2" onfocusout="e3 = this.value;" value="0" disabled class="ciclo">
       <br>
       <label>CICLO 2 </label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo2_mg0"  value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo2_mg1"  value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo2_mg2"  value="0" disabled>
+      <input min="0"type="number" id="ciclo2_mg0"  value="0" disabled class="ciclo"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo2_mg1"  value="0" disabled class="ciclo"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo2_mg2"  value="0" disabled class="ciclo">
       <br>
       <label>CICLO 3 </label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo3_mg0"  value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo3_mg1"  value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo3_mg2"  value="0" disabled>
+      <input min="0"type="number" id="ciclo3_mg0"  value="0" disabled class="ciclo"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo3_mg1"  value="0" disabled class="ciclo" > &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo3_mg2"  value="0" disabled class="ciclo">
       <br>
       <label>CICLO 4 </label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo4_mg0"  value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo4_mg1"  value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo4_mg2"  value="0" disabled>
+      <input min="0"type="number" id="ciclo4_mg0"  value="0" disabled class="ciclo"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo4_mg1"  value="0" disabled class="ciclo"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo4_mg2"  value="0" disabled class="ciclo">
       <br>
       <label>CICLO 5 </label>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo5_mg0"  value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo5_mg1"  value="0" disabled> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-      <input type="number" id="ciclo5_mg2"  value="0" disabled>
+      <input min="0"type="number" id="ciclo5_mg0"  value="0" disabled class="ciclo"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo5_mg1"  value="0" disabled class="ciclo"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+      <input min="0"type="number" id="ciclo5_mg2"  value="0" disabled class="ciclo">
       <br>
     </div>
     <br>
   </div>   
   
   <div class="bloco" id="bloco_resultados">
-    <p>teste</p>
+    <div id="div_avisos_title">
+      <label id="avisos_title"><b>AVISOS</b></label>
+    <br>
+      <i><label id="avisos"></label></i>
+    </div>
+
+
+
+    <br>
+
+
+
+    <div id="div_resultados_op">
+      
+    
+
+    </div>
   </div>
 
   <div class="bloco" id="bloco_acoes">
@@ -145,9 +161,9 @@
          
     </div>
     <div id="bloco_acao3">
-      <a href="telas/sapmhi_tela.html"><button>SAPMHI</button></a>
-      <button onclick="para()">PARAR</button>
-      <button onclick="inicia()">INICIAR</button>
+      <a href="telas/sapmhi_tela.html"><button id="sapmhi">SAPMHI</button></a>
+      <button id="parar" onclick="para()">PARAR</button>
+      <button id="iniciar" onclick="inicia()">INICIAR</button>
          
     </div>
     
