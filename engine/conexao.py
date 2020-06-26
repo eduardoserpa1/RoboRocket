@@ -5,11 +5,10 @@ import iq_util
 
 t = sys.argv[1]
 ativo = sys.argv[2]
+login = str(sys.argv[3])
+senha = str(sys.argv[4])
 
 r = ""
-
-login = "dudu.rserpa@gmail.com"
-senha = "dudu123les"
 
 conta = iq_util.conexao_iq(login,senha)
 

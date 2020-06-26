@@ -1,6 +1,32 @@
 var valor ="";
 var id_ativos = [];
 
+function queryString(parameter) {  
+    var loc = location.search.substring(1, location.search.length);   
+    var param_value = false;   
+    var params = loc.split("&");   
+    for (i=0; i<params.length;i++) {   
+        param_name = params[i].substring(0,params[i].indexOf('='));   
+        if (param_name == parameter) {                                          
+            param_value = params[i].substring(params[i].indexOf('=')+1)   
+        }   
+    }   
+    if (param_value) {   
+        return param_value;   
+    }   
+    else {   
+        return undefined;   
+    }   
+}
+
+    var formata = queryString("usuario");
+    formata = formata.split(",");
+    var login = formata[0];
+    var senha = formata[1];
+
+function redireciona_index(){
+    window.location.href = "../index.html?usuario="+login+","+senha;
+}
 var passaValor = function(valor){
 
     if(id_ativos.length >= 2){
@@ -14,11 +40,12 @@ var passaValor = function(valor){
     var r = confirm("Você tem certeza que deseja operar no ativo '"+valor+"'");
 
     if(r==true){
-        window.location.href = "../index.html?nomeAtivo="+valor;
+        window.location.href = "../index.html?nomeAtivo="+valor+"&usuario="+login+","+senha;
     }else{
         
     }
 }
+
 function chamaPy(){
 
     const {PythonShell} = require("python-shell");
@@ -29,15 +56,18 @@ function chamaPy(){
     
     var tempo_vela = document.getElementById('tempo').value;
 
+    document.getElementById('qtd_ativos').innerHTML = "Processando análise..."
+    document.getElementById('main').style = "cursor:wait;";
+
     var opcoes = {
         scriptPath : path.join(__dirname, '../engine/'),
-        args : [tipo_vela, tempo_vela]
+        args : [tipo_vela, tempo_vela, login, senha]
     }
 
     var sapmhi_py = new PythonShell('sapmhi_py.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-        
+        document.getElementById('main').style = "cursor:pointer;";
         document.getElementById('resultado_div').innerHTML = "";
         var index=0;
 

@@ -10,6 +10,8 @@ tipo_vela = int(sys.argv[4])
 ativo = str(sys.argv[5])
 delay = int(sys.argv[6])
 tipo_conta = str(sys.argv[7])
+login = str(sys.argv[8])
+senha = str(sys.argv[9])
 
 
 
@@ -24,7 +26,7 @@ else:
     
 
 
-conta = iq_util.conexao_iq("dudu.rserpa@gmail.com","dudu123les")
+conta = iq_util.conexao_iq(login,senha)
 
 conta.change_balance(tipo_conta)
 

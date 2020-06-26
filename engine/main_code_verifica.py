@@ -10,6 +10,8 @@ tipo_vela = int(sys.argv[4])
 ativo = str(sys.argv[5])
 ordem_executada = str(sys.argv[6])
 delay = int(sys.argv[7])
+login = str(sys.argv[8])
+senha = str(sys.argv[9])
 
 
 
@@ -21,7 +23,7 @@ if tipo_vela==60:
 else:
     tipo_vela_compra = 5
 
-conta = iq_util.conexao_iq("dudutxgamess@gmail.com","dudu123les")
+conta = iq_util.conexao_iq(login,senha)
 
 delay_final= 58-delay
 

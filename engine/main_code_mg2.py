@@ -11,6 +11,8 @@ ativo = str(sys.argv[5])
 ordem_executada = str(sys.argv[6])
 delay = int(sys.argv[7])
 tipo_conta = str(sys.argv[8])
+login = str(sys.argv[9])
+senha = str(sys.argv[10])
 
 
 
@@ -22,7 +24,7 @@ if tipo_vela==60:
 else:
     tipo_vela_compra = 5
 
-conta = iq_util.conexao_iq("dudu.rserpa@gmail.com","dudu123les")
+conta = iq_util.conexao_iq(login,senha)
 
 conta.change_balance(tipo_conta)
 

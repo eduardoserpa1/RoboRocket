@@ -1,0 +1,80 @@
+body{
+    text-align: center;
+    font-family: Roboto;
+    background-image: url("../img/background_rocket.png");
+    color: white;
+    
+}
+input:focus,button:focus {
+    box-shadow: 0 0 0 0;
+    outline: 0;
+}
+.bloco{
+    /*background-color: #191e2e;*/
+    background-color: #1b2134;
+    border: solid 1px #1b2336;
+    border-radius: 15px;
+
+}
+#logo{
+    font-size: 32px;
+    margin-left: 250px;
+    margin-right: 250px;
+}
+#login{
+    margin-top: 10px;
+    margin-left: 250px;
+    margin-right: 250px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    height: 230px;
+  
+}
+#login label{
+     font-size: 24px;
+    
+}
+#login input{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 300px;
+    height: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: Roboto;
+    color: black;
+    border: solid 1px white;
+    border-radius: 7px;
+    text-align: center;
+}
+#login input:focus{
+    background-color: #e4e4e4;
+    border-color: #e4e4e4;
+}
+#login button{
+    width: 200px;
+    height: 40px;
+    color: black;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    border: solid 1px white;
+    border-radius: 7px;
+}
+#login button:hover{    
+    background-color: #c7c7c7;  
+    border-color: #c7c7c7;
+}
+#login button:active{    
+    background-color: #505050;
+    border-color: #505050;  
+}
+#avisos{
+    margin-left: 250px;
+    margin-top: 10px;
+    margin-right: 250px;
+    height: 100px;
+    color: #e22828;
+}
+
+

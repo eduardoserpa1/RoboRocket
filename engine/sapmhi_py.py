@@ -6,10 +6,12 @@ import iq_util
 div_final = ""
 lista_final = []
 
-tempo_vela = int(sys.argv[2])
 tipo_vela = int(sys.argv[1])
+tempo_vela = int(sys.argv[2])
+login = str(sys.argv[3])
+senha = str(sys.argv[4])
 
-c = iq_util.conexao_iq("dudu.rserpa@gmail.com","dudu123les")
+c = iq_util.conexao_iq(login,senha)
 
 while True:
     if c.check_connect() == False:

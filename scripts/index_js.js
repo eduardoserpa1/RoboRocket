@@ -28,7 +28,9 @@ function sleepjs(milliseconds) {
       }
     }
 }
-
+function redireciona_sapmhi(){
+    window.location.href = "telas/sapmhi_tela.html?usuario="+login+","+senha;
+}
 
 //------------------------------------
 //Funções de verificação     interface/funcionamento
@@ -55,22 +57,21 @@ function conexao_iq(tipo_conta){
     
     const {PythonShell} = require("python-shell");
     var path = require("path");
-    
+    document.getElementById('main').style = "cursor:wait;";
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [tipo_conta, ativo_selecionado]
+        args : [tipo_conta, ativo_selecionado, login, senha]
     }
 
     var pypy = new PythonShell('conexao.py', opcoes);
 
     pypy.on('message', function(message){
+        document.getElementById('main').style = "cursor:default;";
         var aux = message.split(",");
         email = aux[0];
         saldo = aux[1];
         profit = aux[2];
-        if(ativo_selecionado==undefined){
-        document.getElementById("avisos").innerHTML = "Dados carregados com sucesso, utilize o <b>SAPMHI</b> para escolher um ativo!";
-        }
+    
         envia_innerhtml(tipo_conta,saldo,email,ativo_selecionado,profit);
         
 
@@ -185,7 +186,7 @@ function main_code(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code.py', opcoes);
@@ -223,7 +224,7 @@ function main_code_mg1(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
@@ -277,7 +278,7 @@ function main_code_mg2(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
@@ -327,7 +328,7 @@ function main_code_verifica(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
@@ -366,7 +367,7 @@ function main_code_soros(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code.py', opcoes);
@@ -403,7 +404,7 @@ function main_code_soros_mg1(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
@@ -478,7 +479,7 @@ function main_code_soros_mg2(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
@@ -528,7 +529,7 @@ function main_code_soros_verifica(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
@@ -567,7 +568,7 @@ function main_code_ciclos(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code.py', opcoes);
@@ -602,7 +603,7 @@ function main_code_ciclos_mg1(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
@@ -664,7 +665,7 @@ function main_code_ciclos_mg2(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
@@ -719,7 +720,7 @@ function main_code_ciclos_verifica(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
@@ -762,7 +763,7 @@ function main_code_ciclosoros(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code.py', opcoes);
@@ -797,7 +798,7 @@ function main_code_ciclosoros_mg1(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada, delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_mg1.py', opcoes);
@@ -871,7 +872,7 @@ function main_code_ciclosoros_mg2(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay, tipo_conta,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_mg2.py', opcoes);
@@ -924,7 +925,7 @@ function main_code_ciclosoros_verifica(){
 
     var opcoes = {
         scriptPath : path.join(__dirname, 'engine/'),
-        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay]
+        args : [e1, e2, e3, tipo_vela, ativo_selecionado, ordem_executada,delay,login, senha]
     }
 
     var sapmhi_py = new PythonShell('main_code_verifica.py', opcoes);
@@ -1291,6 +1292,10 @@ function gera_mg_soro(){
 
 
 //------------------------------------
+var formata = queryString("usuario");
+formata = formata.split(",");
+var login = formata[0];
+var senha = formata[1];
 //Globais referente aos campos da interface
 var ativo_selecionado = queryString("nomeAtivo");
 var tipo_conta = "PRACTICE";                                
@@ -1333,7 +1338,7 @@ var ordem_executada="";
 //Determinações iniciais 
 var orientador=0;
 var ordem="";
-document.getElementById("avisos").innerHTML = "Carregando dados da conta...";
+document.getElementById("avisos").innerHTML = "Bem vindo ao painel do Robô Rocket !";
 
 conexao_iq(tipo_conta);
 sleep(10000).then(() => {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<htmlid="main">
   <head>
     <meta charset="UTF-8">
     
@@ -8,16 +8,16 @@
 
     <script src="../scripts/sapmhi_js.js"></script>
 
-    <title>SAP MHI - Rocket v0.0</title>
+    <title>Robô Rocket v1.0 - SAP MHI</title>
 
   </head>
-  <body>
-    
-    <h1>Bem-vindo ao Serviço de Análise de Probabilidade Motion History Image - (SAP-MHI)</h1>
-    <h3>Escolha abaixo o tempo de vela e quantidade de horas para serem analisadas</h3>
-
-    <div id="info">
-
+  <body >
+    <div class="bloco" id="logo">
+      <h1>Bem-vindo ao Serviço de Análise de Probabilidade Motion History Image<br>(SAP-MHI)</h1>
+      
+    </div>
+    <div class="bloco" id="info">
+      <h3>Escolha abaixo o tempo de vela e quantidade de horas para serem analisadas</h3>
     <select id="sel" class="info_inputs">
       <option value="60" >M1</option>
       <option value="300" >M5</option>
@@ -27,21 +27,21 @@
     
     <button class="info_inputs" id="botao" onclick="chamaPy()">ANALISAR</button>
 
-    </div>
+    
     <div id="qtd_ativos_div">
       <b>Quantidade de ativos abertos no momento: </b><i id="qtd_ativos">Clique em "Analisar" para mostrar as informações...</i>
     </div>
-    
+    </div>
     <div id="resultado_div">
 
     </div>
     
   <div id="div_botao_sair">
-    <a href="../index.html">
-    <button id="botao_sair">
+    
+    <button id="botao_sair" onclick="redireciona_index()">
       SAIR
     </button>
-  </a>
+ 
   </div>
 
 

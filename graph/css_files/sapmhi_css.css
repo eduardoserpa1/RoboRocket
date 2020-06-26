@@ -13,7 +13,12 @@ select:focus {outline:none}
 option:focus {outline:none}
 
 
-
+.bloco{
+    /*background-color: #191e2e;*/
+    background-color: #1b2134;
+    border: solid 1px #1b2336;
+    border-radius: 15px;
+}
 .info_inputs:hover{
     background-color: #41495c;
 }
@@ -83,7 +88,13 @@ option:focus {outline:none}
 }
 #info{
     text-align: center; 
+    margin-right: 50px;
+    margin-left: 50px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    height: 150px;
 }
+
 
 #tempo{
     height: 46px;
@@ -98,6 +109,8 @@ option:focus {outline:none}
     font-family: Roboto thin;
     margin-left: 2%;
     margin-top: 1%;
+    position: absolute;
+    
 }
 #qtd_ativos{
     opacity: 50%;
@@ -139,4 +152,8 @@ option:focus {outline:none}
 }
 #botao_sair:active{
     background-color: #2e344b;
+}
+#logo{
+    margin-left: 50px;
+    margin-right: 50px;
 }
