@@ -57,7 +57,7 @@ function chamaPy(){
     var tempo_vela = document.getElementById('tempo').value;
 
     document.getElementById('qtd_ativos').innerHTML = "Processando análise..."
-    document.getElementById('main').style = "cursor:wait;";
+    //document.getElementById('main').style = "cursor:wait;";
 
     var opcoes = {
         scriptPath : path.join(__dirname, '../engine/'),
@@ -67,7 +67,7 @@ function chamaPy(){
     var sapmhi_py = new PythonShell('sapmhi_py.py', opcoes);
 
     sapmhi_py.on('message', function(message){
-        document.getElementById('main').style = "cursor:pointer;";
+        //document.getElementById('main').style = "cursor:default;";
         document.getElementById('resultado_div').innerHTML = "";
         var index=0;
 

@@ -40,4 +40,5 @@ if verifica1==True and verifica2==True:
 
 if reason == '{"code":"requests_limit_exceeded","message":"The number of requests has been exceeded. Try again in 10 minutes.","ttl":600}':
     final = "tempo"
+    
 print(str(final))
