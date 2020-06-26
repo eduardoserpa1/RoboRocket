@@ -31,7 +31,7 @@ function sleepjs(milliseconds) {
 function redireciona_sapmhi(){
     window.location.href = "telas/sapmhi_tela.html?usuario="+login+","+senha;
 }
-
+ 
 //------------------------------------
 //Funções de verificação     interface/funcionamento
 
@@ -85,21 +85,22 @@ function verifica_stop(){
     conexao_iq(tipo_conta);
     var stop_w = parseFloat(stop_win);
     var stop_l = parseFloat(stop_loss);
-
+    sleep(10000).then(() => {
+    
      if (stop_w<=saldo) {
          para();
-         console.log("XXXXXXXXXXX   STOP WIN   XXXXXXXXXXX");
+         
          document.getElementById("avisos").innerHTML = "STOP WIN";
      }
 
      if (stop_l>=saldo) {
         para();
-        console.log("XXXXXXXXXXX   STOP LOSS   XXXXXXXXXXX");
+        
         document.getElementById("avisos").innerHTML = "STOP WIN";
      }
 
      gera_ganho();
-     
+    }); 
 }
 
 function desativa_inputs(){
@@ -210,9 +211,7 @@ function main_code(){
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         
         ordem_executada = message + "";
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+       
     })
 }
 function main_code_mg1(){
@@ -247,6 +246,7 @@ function main_code_mg1(){
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN DIRETO  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
             verificador_win=true;
+            minutos_verifica=1;
         }
         if(message=="loss"){
             verificador_win=false;
@@ -254,6 +254,7 @@ function main_code_mg1(){
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  1 MG  ( $"+e2+" )</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
             verificador_win=false;
+            
         }
         if(message=="lossmg0"){
             verificador_win=true;
@@ -261,11 +262,10 @@ function main_code_mg1(){
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win=true;
+            minutos_verifica=1;
         }
 
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+        
 
     })
 }
@@ -299,6 +299,7 @@ function main_code_mg2(){
             console.log("--- WIN MG1 ---");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 1  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+            minutos_verifica=2;                                            
         }
         if(message=="loss"){
             verificador_win_mg1=false;
@@ -312,11 +313,10 @@ function main_code_mg2(){
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win_mg1=true;
+            minutos_verifica=2;
         }
 
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+        
     })
 }
 function main_code_verifica(){
@@ -348,15 +348,15 @@ function main_code_verifica(){
             console.log("--- WIN MG2 ---");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 2  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+                                                                minutos_verifica=3;
         }
         if(message=="loss"){
             console.log("XXX- LOSS -XXX");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
+                                                                minutos_verifica=3;
         }
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+        
     })
 }
 //SOROS
@@ -390,9 +390,7 @@ function main_code_soros(){
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         
         ordem_executada = message + "";
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+        
     })
 }
 function main_code_soros_mg1(){
@@ -427,7 +425,7 @@ function main_code_soros_mg1(){
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
             
             verificador_win=true;
-
+            minutos_verifica=1;
             if(conta_nivel_soro<nivel_soro){
                 
                 var lucro = e1*profit;
@@ -462,11 +460,10 @@ function main_code_soros_mg1(){
             e1 = document.getElementById('entrada_soro').value;
             gera_mg_soro();
             conta_nivel_soro=0;
+            minutos_verifica=1;
         }
 
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+        
 
     })
 }
@@ -500,6 +497,7 @@ function main_code_soros_mg2(){
             console.log("--- WIN MG1 ---");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 1  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+                                                                minutos_verifica=2;
         }
         if(message=="loss"){
             verificador_win_mg1=false;
@@ -513,11 +511,10 @@ function main_code_soros_mg2(){
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
             "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win_mg1=true;
+            minutos_verifica=2;
         }
 
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+       
     })
 }
 function main_code_soros_verifica(){
@@ -549,15 +546,15 @@ function main_code_soros_verifica(){
             console.log("--- WIN MG2 ---");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 2  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+                                                                minutos_verifica=3;
         }
         if(message=="loss"){
             console.log("XXX- LOSS -XXX");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
-        }
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+                                                                minutos_verifica=3;
+                                                            }
+       
     })
 }
 //CICLOS
@@ -589,9 +586,7 @@ function main_code_ciclos(){
         document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  ENTRADA  ( $"+e1+" )</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         ordem_executada = message + "";
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+        
     })
 }
 function main_code_ciclos_mg1(){
@@ -624,6 +619,7 @@ function main_code_ciclos_mg1(){
             console.log("--- WIN ---");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN DIRETO  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+                                                                minutos_verifica=1;
             verificador_win=true;
 
             conta_ciclos=0;
@@ -644,6 +640,7 @@ function main_code_ciclos_mg1(){
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
             "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
             verificador_win=true;
+            minutos_verifica=1;
 
             conta_ciclos++;
         }
@@ -686,6 +683,7 @@ function main_code_ciclos_mg2(){
             console.log("--- WIN MG1 ---");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 1  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+                                                                minutos_verifica=2;
             conta_ciclos=0;
         }
         if(message=="loss"){
@@ -699,15 +697,14 @@ function main_code_ciclos_mg2(){
             console.log("XXX LOSS XXX");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
             "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
+            minutos_verifica=2;
             verificador_win_mg1=true;
 
             conta_ciclos++;
         }
 
         
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+       
         
     })
 }
@@ -741,17 +738,17 @@ function main_code_ciclos_verifica(){
             conta_ciclos=0;
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 2  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+                                                                minutos_verifica=3;
         }
         if(message=="loss"){
             console.log("XXX- LOSS -XXX");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
+                                                                minutos_verifica=3;
             conta_ciclos++;
         }
       
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+       
     
     })
 }
@@ -784,9 +781,7 @@ function main_code_ciclosoros(){
         document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  ENTRADA  ( $"+e1+" )</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_load.png'> </div>" ;
         ordem_executada = message + "";
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+       
     })
 }
 function main_code_ciclosoros_mg1(){
@@ -819,6 +814,7 @@ function main_code_ciclosoros_mg1(){
             console.log("--- WIN ---");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN DIRETO  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+                                                                minutos_verifica=1;
             verificador_win=true;
             if(conta_ciclos==0){
             if(conta_nivel_soro<nivel_soro){
@@ -849,6 +845,7 @@ function main_code_ciclosoros_mg1(){
             console.log("XXX LOSS XXX");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
             "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
+            minutos_verifica=1;
             verificador_win=true;
 
             conta_ciclos++;
@@ -857,9 +854,7 @@ function main_code_ciclosoros_mg1(){
                 conta_nivel_soro=0;
         }
 
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+        
 
     })
 }
@@ -893,6 +888,7 @@ function main_code_ciclosoros_mg2(){
             console.log("--- WIN MG1 ---");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 1  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+                                                                minutos_verifica=2;
             conta_ciclos=0;
         }
         if(message=="loss"){
@@ -906,14 +902,13 @@ function main_code_ciclosoros_mg2(){
             console.log("XXX LOSS XXX");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
             "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
+            minutos_verifica=2;
             verificador_win_mg1=true;
 
             conta_ciclos++;
         }
 
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+       
     })
 }
 function main_code_ciclosoros_verifica(){
@@ -946,16 +941,16 @@ function main_code_ciclosoros_verifica(){
             conta_ciclos=0;
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  WIN MG 2  + $"+f.toFixed(2)+"</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_win.png'> </div>" ;
+                                                                minutos_verifica=3;
         }
         if(message=="loss"){
             console.log("XXX- LOSS -XXX");
             document.getElementById('item_'+orientador).innerHTML = "<div id='div_text_status'><b>[ "+hora_p+":"+min_p+" | "+ordem+" ]"+"  -  LOSS</b></div>" + 
                                                                 "<div id='div_icon_status'>  <img id='icon_status' src='graph/icon/icon_loss.png'> </div>" ;
+                                                                minutos_verifica=3;
             conta_ciclos++;
         }
-        sleep(10000).then(() => {
-            verifica_stop();
-        });
+        
     })
 }
 //------------------------------------
@@ -1335,6 +1330,7 @@ var limite = 1000;
 var executa;
 var tipo_vela;
 var ordem_executada="";
+var minutos_verifica= -1;
 //Determinações iniciais 
 var orientador=0;
 var ordem="";
@@ -1425,10 +1421,13 @@ if (document.getElementById('m1').checked==true) {
                 orientador++;
                 
             }
-            if(sec==10 || sec==30 || sec==50){
+            if(min%5==minutos_verifica && sec==20){
                 verifica_stop();
+                minutos_verifica= -1;
             }
-            
+            if(min%5==4 && sec==40){
+                minutos_verifica= -1;
+            }
         },
         limite);
     }
@@ -1497,8 +1496,11 @@ if (document.getElementById('m1').checked==true) {
             orientador++;
             
         }
-        if(sec==10 || sec==30 || sec==50){
+        if(min%5==minutos_verifica && sec==20){
             verifica_stop();
+        }
+        if(min%5==4 && sec==40){
+            minutos_verifica= -1;
         }
     },
     limite);
@@ -1599,8 +1601,11 @@ if (document.getElementById('m1').checked==true) {
             orientador++;
             
         }
-        if(sec==10 || sec==30 || sec==50){
+        if(min%5==minutos_verifica && sec==20){
             verifica_stop();
+        }
+        if(min%5==4 && sec==40){
+            minutos_verifica= -1;
         }
     },
     limite);
@@ -1702,8 +1707,11 @@ if (document.getElementById('m1').checked==true) {
             
         }
        
-        if(sec==10 || sec==30 || sec==50){
+        if(min%5==minutos_verifica && sec==20){
             verifica_stop();
+        }
+        if(min%5==4 && sec==40){
+            minutos_verifica= -1;
         }
         
     },
@@ -1778,7 +1786,7 @@ if (document.getElementById('m5').checked==true) {
             orientador++;
             
         }
-        if(sec==15){
+        if((min==15 || min==50) && sec==20){
             verifica_stop();
         }
     },
@@ -1848,7 +1856,7 @@ if (document.getElementById('m5').checked==true) {
             orientador++;
             
         }
-        if(sec==15){
+        if((min==15 || min==50) && sec==20){
             verifica_stop();
         }
     },
@@ -1950,7 +1958,7 @@ if (document.getElementById('m5').checked==true) {
             orientador++;
             
         }
-        if(sec==15){
+        if((min==15 || min==50) && sec==20){
             verifica_stop();
         }
     },
@@ -2052,7 +2060,7 @@ if (document.getElementById('m5').checked==true) {
             orientador++;
             
         }
-        if(sec==15){
+        if((min==15 || min==50) && sec==20){
             verifica_stop();
         }
         

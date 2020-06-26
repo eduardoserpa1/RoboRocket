@@ -1,5 +1,6 @@
 {
   "name": "roborocket",
+  "productName": "Robô Rocket MHI",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -17,7 +18,8 @@
   },
   "homepage": "https://github.com/eduardoserpa1/RoboRocket#readme",
   "devDependencies": {
-    "electron": "^8.2.5"
+    "electron": "^8.3.4",
+    "electron-packager": "^14.2.1"
   },
   "dependencies": {
     "python-shell": "^2.0.0"

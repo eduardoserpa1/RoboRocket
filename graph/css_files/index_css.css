@@ -1,3 +1,7 @@
+@font-face {
+    font-family: Roboto;
+    src: url(../fonts/Roboto-Regular.ttf)
+}
 /*tag*/
 body{
     background-image: url("../img/background_rocket.png");
